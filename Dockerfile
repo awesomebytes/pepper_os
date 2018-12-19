@@ -64,8 +64,6 @@ RUN emerge ros-kinetic/robot_state_publisher \
     ros-kinetic/ros_numpy \
     ros-kinetic/ddynamic_reconfigure_python \
     ros-kinetic/pepper_meshes \
-    ros-kinetic/naoqi_libqicore \
-    ros-kinetic/naoqi_libqi \
     ros-kinetic/navigation \
     ros-kinetic/slam_gmapping \
     ros-kinetic/depthimage_to_laserscan \
@@ -80,6 +78,10 @@ RUN emerge ros-kinetic/robot_state_publisher \
     ros-kinetic/pcl_conversions \
     ros-kinetic/pcl_ros \
     media-sound/pulseaudio
+
+#     ros-kinetic/naoqi_libqicore \
+#     ros-kinetic/naoqi_libqi \
+#     ros-kinetic/move_base_flex
 
 RUN pip install --user pysqlite
 RUN pip install --user ipython
