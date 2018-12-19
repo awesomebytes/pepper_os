@@ -48,6 +48,8 @@ RUN emaint sync -a
 RUN emerge dev-python/pip
 RUN pip install --user argparse
 
+RUN echo ">=media-plugins/alsa-plugins-1.1.7 pulseaudio" >> $EPREFIX/etc/portage/package.use
+
 RUN emerge ros-kinetic/robot_state_publisher \
     ros-kinetic/geometry2 \
     ros-kinetic/ros_control \
@@ -74,7 +76,6 @@ RUN emerge ros-kinetic/robot_state_publisher \
     ros-kinetic/perception_pcl \
     ros-kinetic/pcl_conversions \
     ros-kinetic/pcl_ros \
-    ros-kinetic/move_base_flex \
     media-sound/pulseaudio
 
 RUN pip install --user pysqlite
