@@ -53,7 +53,8 @@ RUN echo ">=media-plugins/alsa-plugins-1.1.7 pulseaudio" >> $EPREFIX/etc/portage
 RUN echo "# required by ros-kinetic/pcl_conversions-0.2.1::ros-overlay for navigation" >> $EPREFIX/etc/portage/package.accept_keywords &&\
     echo "=sci-libs/pcl-9999 **" >> $EPREFIX/etc/portage/package.accept_keywords
 
-# Very ugly hack, need to fix this from whereve it came. looks like desktop, ros_base may not have this problem
+# Very ugly hack, need to fix this from whereve it came
+# some packages are affected, others arent, weird
 RUN cd /tmp/gentoo/opt &&\
     find ./ -type f -name *.pc -exec sed -i -e 's@/home/user/gentoo@/tmp/gentoo@g' {} \; &&\
     find ./ -type f -name *.cmake -exec sed -i -e 's@/home/user/gentoo@/tmp/gentoo@g' {} \;
@@ -72,7 +73,6 @@ RUN emerge ros-kinetic/robot_state_publisher \
     ros-kinetic/navigation \
     ros-kinetic/slam_gmapping \
     ros-kinetic/depthimage_to_laserscan \
-    ros-kinetic/web_video_server \
     ros-kinetic/rosbridge_suite \
     media-libs/portaudio \
     net-libs/libnsl \
@@ -86,7 +86,11 @@ RUN emerge ros-kinetic/robot_state_publisher \
 
 #     ros-kinetic/naoqi_libqicore \
 #     ros-kinetic/naoqi_libqi \
+# need the patches I made in ros_pepperfix
 #     ros-kinetic/move_base_flex
+# needs some dependency
+#     ros-kinetic/web_video_server \
+# CODEC_FLAG_GLOBAL_HEADER -> AV_CODEC_FLAG_GLOBAL_HEADER
 
 RUN pip install --user pysqlite
 RUN pip install --user ipython
