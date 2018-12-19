@@ -6,9 +6,10 @@ WORKDIR /home/nao
 # ENTRYPOINT ["/bin/bash"]
 
 # Download and extract the Gentoo Prefix + ROS desktop image
-RUN wget http://github.com/awesomebytes/ros_overlay_on_gentoo_prefix_32b/releases/download/release%2F2018-12-19T01at13plus00at00/gentoo_on_tmp_with_ros-kinetic_desktop-x86_2018-12-19T01at13plus00at00.tar.gz.part-00 &&\
-    wget http://github.com/awesomebytes/ros_overlay_on_gentoo_prefix_32b/releases/download/release%2F2018-12-19T01at13plus00at00/gentoo_on_tmp_with_ros-kinetic_desktop-x86_2018-12-19T01at13plus00at00.tar.gz.part-01 &&\
-    wget http://github.com/awesomebytes/ros_overlay_on_gentoo_prefix_32b/releases/download/release%2F2018-12-19T01at13plus00at00/gentoo_on_tmp_with_ros-kinetic_desktop-x86_2018-12-19T01at13plus00at00.tar.gz.part-02 &&\
+RUN wget http://github.com/awesomebytes/ros_overlay_on_gentoo_prefix_32b/releases/download/release%2F2018-12-19T01at13plus00at00/gentoo_on_tmp_with_ros-kinetic_desktop-x86_2018-12-19T01at13plus00at00.tar.gz.part-00 &\
+    wget http://github.com/awesomebytes/ros_overlay_on_gentoo_prefix_32b/releases/download/release%2F2018-12-19T01at13plus00at00/gentoo_on_tmp_with_ros-kinetic_desktop-x86_2018-12-19T01at13plus00at00.tar.gz.part-01 &\
+    wget http://github.com/awesomebytes/ros_overlay_on_gentoo_prefix_32b/releases/download/release%2F2018-12-19T01at13plus00at00/gentoo_on_tmp_with_ros-kinetic_desktop-x86_2018-12-19T01at13plus00at00.tar.gz.part-02 &\
+    wait &&\
     cat gentoo_on_tmp* > gentoo_on_tmp.tar.gz &&\
     rm gentoo_on_tmp*.part* &&\
     tar xvf gentoo_on_tmp.tar.gz &&\
