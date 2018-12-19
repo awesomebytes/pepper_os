@@ -50,6 +50,13 @@ RUN pip install --user argparse
 
 RUN echo ">=media-plugins/alsa-plugins-1.1.7 pulseaudio" >> $EPREFIX/etc/portage/package.use
 
+RUN echo "# required by ros-kinetic/pcl_conversions-0.2.1::ros-overlay\n\
+# required by ros-kinetic/pcl_ros-1.4.4::ros-overlay\n\
+# required by ros-kinetic/navfn-1.14.4::ros-overlay\n\
+# required by ros-kinetic/navigation-1.14.4::ros-overlay\n\
+# required by ros-kinetic/navigation (argument)\n\
+=sci-libs/pcl-9999 **" >> $EPREFIX/etc/portage/package.accept_keywords
+
 RUN emerge ros-kinetic/robot_state_publisher \
     ros-kinetic/geometry2 \
     ros-kinetic/ros_control \
