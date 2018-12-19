@@ -53,7 +53,7 @@ RUN echo ">=media-plugins/alsa-plugins-1.1.7 pulseaudio" >> $EPREFIX/etc/portage
 RUN echo "# required by ros-kinetic/pcl_conversions-0.2.1::ros-overlay for navigation" >> $EPREFIX/etc/portage/package.accept_keywords &&\
     echo "=sci-libs/pcl-9999 **" >> $EPREFIX/etc/portage/package.accept_keywords
 
-RUN cd /tmp/gentoo &&\
+RUN cd /tmp/gentoo/opt &&\
     find ./ -type f -exec sed -i -e 's@/home/user/gentoo@/tmp/gentoo@g' {} \;
 
 RUN emerge ros-kinetic/robot_state_publisher \
