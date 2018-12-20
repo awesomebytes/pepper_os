@@ -59,71 +59,73 @@ RUN cd /tmp/gentoo/opt &&\
     find ./ -type f -name *.pc -exec sed -i -e 's@/home/user/gentoo@/tmp/gentoo@g' {} \; &&\
     find ./ -type f -name *.cmake -exec sed -i -e 's@/home/user/gentoo@/tmp/gentoo@g' {} \;
 
-RUN emerge ros-kinetic/robot_state_publisher \
-    ros-kinetic/geometry2 \
-    ros-kinetic/ros_control \
-    ros-kinetic/image_common \
-    ros-kinetic/image_transport_plugins \
-    ros-kinetic/diagnostics \
-    ros-kinetic/octomap_msgs \
-    ros-kinetic/tf2_geometry_msgs \
-    ros-kinetic/ros_numpy \
-    ros-kinetic/ddynamic_reconfigure_python \
-    ros-kinetic/pepper_meshes \
-    ros-kinetic/navigation \
-    ros-kinetic/slam_gmapping \
-    ros-kinetic/depthimage_to_laserscan \
-    ros-kinetic/rosbridge_suite \
-    media-libs/portaudio \
-    net-libs/libnsl \
-    dev-cpp/eigen \
-    ros-kinetic/cmake_modules \
-    ros-kinetic/naoqi_bridge_msgs \
-    ros-kinetic/perception_pcl \
-    ros-kinetic/pcl_conversions \
-    ros-kinetic/pcl_ros \
-    media-sound/pulseaudio
+# TODO: Need to fix https://bugs.gentoo.org/673464
 
-#     ros-kinetic/naoqi_libqicore \
-#     ros-kinetic/naoqi_libqi \
-# need the patches I made in ros_pepperfix
-#     ros-kinetic/move_base_flex
-# needs some dependency
-#     ros-kinetic/web_video_server \
-# CODEC_FLAG_GLOBAL_HEADER -> AV_CODEC_FLAG_GLOBAL_HEADER
+# RUN emerge ros-kinetic/robot_state_publisher \
+#     ros-kinetic/geometry2 \
+#     ros-kinetic/ros_control \
+#     ros-kinetic/image_common \
+#     ros-kinetic/image_transport_plugins \
+#     ros-kinetic/diagnostics \
+#     ros-kinetic/octomap_msgs \
+#     ros-kinetic/tf2_geometry_msgs \
+#     ros-kinetic/ros_numpy \
+#     ros-kinetic/ddynamic_reconfigure_python \
+#     ros-kinetic/pepper_meshes \
+#     ros-kinetic/navigation \
+#     ros-kinetic/slam_gmapping \
+#     ros-kinetic/depthimage_to_laserscan \
+#     ros-kinetic/rosbridge_suite \
+#     media-libs/portaudio \
+#     net-libs/libnsl \
+#     dev-cpp/eigen \
+#     ros-kinetic/cmake_modules \
+#     ros-kinetic/naoqi_bridge_msgs \
+#     ros-kinetic/perception_pcl \
+#     ros-kinetic/pcl_conversions \
+#     ros-kinetic/pcl_ros \
+#     media-sound/pulseaudio
 
-RUN pip install --user pysqlite
-RUN pip install --user ipython
-# Fix all python shebangs
-RUN cd ~/.local/bin &&\
-    find ./ -type f -exec sed -i -e 's/\#\!\/usr\/bin\/python2.7/\#\!\/tmp\/gentoo\/usr\/bin\/python2.7/g' {} \;
+# #     ros-kinetic/naoqi_libqicore \
+# #     ros-kinetic/naoqi_libqi \
+# # need the patches I made in ros_pepperfix
+# #     ros-kinetic/move_base_flex
+# # needs some dependency
+# #     ros-kinetic/web_video_server \
+# # CODEC_FLAG_GLOBAL_HEADER -> AV_CODEC_FLAG_GLOBAL_HEADER
 
-RUN pip install --user --upgrade numpy
-RUN pip install --user scipy
-RUN pip install --user pytz
-RUN pip install --user wstool
+# RUN pip install --user pysqlite
+# RUN pip install --user ipython
+# # Fix all python shebangs
+# RUN cd ~/.local/bin &&\
+#     find ./ -type f -exec sed -i -e 's/\#\!\/usr\/bin\/python2.7/\#\!\/tmp\/gentoo\/usr\/bin\/python2.7/g' {} \;
 
-RUN pip install --user Theano
-RUN pip install --user keras
+# RUN pip install --user --upgrade numpy
+# RUN pip install --user scipy
+# RUN pip install --user pytz
+# RUN pip install --user wstool
 
-# Tensorflow pending from our custom compiled one...
-# Which would be nice to automate too
+# RUN pip install --user Theano
+# RUN pip install --user keras
 
-RUN pip install --user h5py
-RUN pip install --user opencv-python opencv-contrib-python
+# # Tensorflow pending from our custom compiled one...
+# # Which would be nice to automate too
 
-RUN pip install --user pyaudio
+# RUN pip install --user h5py
+# RUN pip install --user opencv-python opencv-contrib-python
 
-RUN pip install --user SpeechRecognition
-RUN pip install --user nltk
-RUN pip install --user pydub
-# TODO: binarize dlib, takes long to self compile
-RUN pip install --user dlib
+# RUN pip install --user pyaudio
 
-# Fix system stuff to not pull from .local python libs
-RUN echo "import sys\n\
-if sys.executable.startswith('/usr/bin/python'):\n\
-    sys.path = [p for p in sys.path if not p.startswith('/home/nao/.local')]" >> /home/nao/.local/lib/python2.7/site-packages/sitecustomize.py
+# RUN pip install --user SpeechRecognition
+# RUN pip install --user nltk
+# RUN pip install --user pydub
+# # TODO: binarize dlib, takes long to self compile
+# RUN pip install --user dlib
+
+# # Fix system stuff to not pull from .local python libs
+# RUN echo "import sys\n\
+# if sys.executable.startswith('/usr/bin/python'):\n\
+#     sys.path = [p for p in sys.path if not p.startswith('/home/nao/.local')]" >> /home/nao/.local/lib/python2.7/site-packages/sitecustomize.py
 
 # source /tmp/gentoo/opt/ros/kinetic/setup.bash
 # export ROS_LANG_DISABLE=genlisp:geneus
