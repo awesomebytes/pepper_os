@@ -83,8 +83,8 @@ RUN emerge ros-kinetic/robot_state_publisher \
     ros-kinetic/naoqi_bridge_msgs \
     ros-kinetic/perception_pcl \
     ros-kinetic/pcl_conversions \
-    ros-kinetic/pcl_ros \
-    
+    ros-kinetic/pcl_ros
+
 # media-sound/pulseaudio
 
 # #     ros-kinetic/naoqi_libqicore \
