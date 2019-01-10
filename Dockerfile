@@ -64,6 +64,13 @@ RUN cd /tmp/gentoo/opt &&\
 
 # TODO: Need to fix https://bugs.gentoo.org/673464
 
+# Navigation needs it
+RUN mkdir -p /tmp/gentoo/etc/portage/patches/sci-libs/pcl-1.8.1 && \
+    cd /tmp/gentoo/etc/portage/patches/sci-libs/pcl-1.8.1 && \
+    wget https://664126.bugs.gentoo.org/attachment.cgi?id=545428 -O gcc8.patch
+RUN echo ">=sci-libs/pcl-1.9.1" >> /tmp/gentoo/etc/portage/package.mask
+RUN emerge sci-libs/pcl
+
 RUN emerge ros-kinetic/robot_state_publisher \
     ros-kinetic/geometry2 \
     ros-kinetic/ros_control
@@ -76,11 +83,7 @@ RUN emerge ros-kinetic/image_common \
     ros-kinetic/ddynamic_reconfigure_python
 # RUN emerge ros-kinetic/pepper_meshes
 # dev-java/icedtea-web-1.6.2 failed
-RUN mkdir -p /tmp/gentoo/etc/portage/patches/sci-libs/pcl-1.8.1 && \
-    cd /tmp/gentoo/etc/portage/patches/sci-libs/pcl-1.8.1 && \
-    wget https://664126.bugs.gentoo.org/attachment.cgi?id=545428 -O gcc8.patch
-RUN echo ">=sci-libs/pcl-1.9.1" >> /tmp/gentoo/etc/portage/package.mask
-RUN emerge sci-libs/pcl-1.8.1
+
 RUN emerge ros-kinetic/navigation
 RUN emerge ros-kinetic/slam_gmapping
 RUN emerge ros-kinetic/depthimage_to_laserscan
