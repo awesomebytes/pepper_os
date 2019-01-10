@@ -71,11 +71,11 @@ RUN emerge ros-kinetic/image_common \
     ros-kinetic/tf2_geometry_msgs \
     ros-kinetic/ros_numpy \
     ros-kinetic/ddynamic_reconfigure_python
-RUN emerge ros-kinetic/pepper_meshes \
-    ros-kinetic/navigation \
-    ros-kinetic/slam_gmapping \
-    ros-kinetic/depthimage_to_laserscan \
-    ros-kinetic/rosbridge_suite
+RUN emerge ros-kinetic/pepper_meshes
+RUN emerge ros-kinetic/navigation
+RUN emerge ros-kinetic/slam_gmapping
+RUN emerge ros-kinetic/depthimage_to_laserscan
+RUN emerge ros-kinetic/rosbridge_suite
 RUN emerge ros-kinetic/cmake_modules \
     ros-kinetic/naoqi_bridge_msgs \
     ros-kinetic/perception_pcl \
