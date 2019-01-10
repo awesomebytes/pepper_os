@@ -61,30 +61,31 @@ RUN cd /tmp/gentoo/opt &&\
 
 # TODO: Need to fix https://bugs.gentoo.org/673464
 
-# RUN emerge ros-kinetic/robot_state_publisher \
-#     ros-kinetic/geometry2 \
-#     ros-kinetic/ros_control \
-#     ros-kinetic/image_common \
-#     ros-kinetic/image_transport_plugins \
-#     ros-kinetic/diagnostics \
-#     ros-kinetic/octomap_msgs \
-#     ros-kinetic/tf2_geometry_msgs \
-#     ros-kinetic/ros_numpy \
-#     ros-kinetic/ddynamic_reconfigure_python \
-#     ros-kinetic/pepper_meshes \
-#     ros-kinetic/navigation \
-#     ros-kinetic/slam_gmapping \
-#     ros-kinetic/depthimage_to_laserscan \
-#     ros-kinetic/rosbridge_suite \
-#     media-libs/portaudio \
-#     net-libs/libnsl \
-#     dev-cpp/eigen \
-#     ros-kinetic/cmake_modules \
-#     ros-kinetic/naoqi_bridge_msgs \
-#     ros-kinetic/perception_pcl \
-#     ros-kinetic/pcl_conversions \
-#     ros-kinetic/pcl_ros \
-#     media-sound/pulseaudio
+RUN emerge ros-kinetic/robot_state_publisher \
+    ros-kinetic/geometry2 \
+    ros-kinetic/ros_control \
+    ros-kinetic/image_common \
+    ros-kinetic/image_transport_plugins \
+    ros-kinetic/diagnostics \
+    ros-kinetic/octomap_msgs \
+    ros-kinetic/tf2_geometry_msgs \
+    ros-kinetic/ros_numpy \
+    ros-kinetic/ddynamic_reconfigure_python \
+    ros-kinetic/pepper_meshes \
+    ros-kinetic/navigation \
+    ros-kinetic/slam_gmapping \
+    ros-kinetic/depthimage_to_laserscan \
+    ros-kinetic/rosbridge_suite \
+    media-libs/portaudio \
+    net-libs/libnsl \
+    dev-cpp/eigen \
+    ros-kinetic/cmake_modules \
+    ros-kinetic/naoqi_bridge_msgs \
+    ros-kinetic/perception_pcl \
+    ros-kinetic/pcl_conversions \
+    ros-kinetic/pcl_ros \
+    
+# media-sound/pulseaudio
 
 # #     ros-kinetic/naoqi_libqicore \
 # #     ros-kinetic/naoqi_libqi \
