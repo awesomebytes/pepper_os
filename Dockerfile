@@ -42,6 +42,9 @@ RUN sed -i -e 's/j1/j'"$((`grep -c \^processor \/proc\/cpuinfo` / 2))"'/g' $EPRE
 RUN sed -i 's/EMERGE_DEFAULT_OPTS=.*//' $EPREFIX/etc/portage/make.conf &&\
     echo "EMERGE_DEFAULT_OPTS=\"--jobs $((`grep -c \^processor \/proc\/cpuinfo` / 2)) --load-average `grep -c \^processor \/proc\/cpuinfo`\"" >> $EPREFIX/etc/portage/make.conf
 
+# Force CHOST to build everything or 32b
+RUN echo "CHOST=i686" >> $EPREFIX/etc/portage/make.conf
+
 # update first
 RUN emaint sync -a
 # Prepare python
@@ -73,6 +76,11 @@ RUN emerge ros-kinetic/image_common \
     ros-kinetic/ddynamic_reconfigure_python
 # RUN emerge ros-kinetic/pepper_meshes
 # dev-java/icedtea-web-1.6.2 failed
+RUN mkdir -p /tmp/gentoo/etc/portage/patches/sci-libs/pcl-1.8.1 && \
+    cd /tmp/gentoo/etc/portage/patches/sci-libs/pcl-1.8.1 && \
+    wget https://664126.bugs.gentoo.org/attachment.cgi?id=545428 -O gcc8.patch
+RUN echo ">=sci-libs/pcl-1.9.1" >> /tmp/gentoo/etc/portage/package.mask
+RUN emerge sci-libs/pcl-1.8.1
 RUN emerge ros-kinetic/navigation
 RUN emerge ros-kinetic/slam_gmapping
 RUN emerge ros-kinetic/depthimage_to_laserscan
