@@ -63,27 +63,34 @@ RUN cd /tmp/gentoo/opt &&\
 
 RUN emerge ros-kinetic/robot_state_publisher \
     ros-kinetic/geometry2 \
-    ros-kinetic/ros_control \
-    ros-kinetic/image_common \
+    ros-kinetic/ros_control
+RUN emerge ros-kinetic/image_common \
     ros-kinetic/image_transport_plugins \
     ros-kinetic/diagnostics \
     ros-kinetic/octomap_msgs \
     ros-kinetic/tf2_geometry_msgs \
     ros-kinetic/ros_numpy \
-    ros-kinetic/ddynamic_reconfigure_python \
-    ros-kinetic/pepper_meshes \
+    ros-kinetic/ddynamic_reconfigure_python
+RUN emerge ros-kinetic/pepper_meshes \
     ros-kinetic/navigation \
     ros-kinetic/slam_gmapping \
     ros-kinetic/depthimage_to_laserscan \
-    ros-kinetic/rosbridge_suite \
-    media-libs/portaudio \
-    net-libs/libnsl \
-    dev-cpp/eigen \
-    ros-kinetic/cmake_modules \
+    ros-kinetic/rosbridge_suite
+RUN emerge ros-kinetic/cmake_modules \
     ros-kinetic/naoqi_bridge_msgs \
     ros-kinetic/perception_pcl \
     ros-kinetic/pcl_conversions \
     ros-kinetic/pcl_ros
+RUN emerge media-libs/portaudio \
+    net-libs/libnsl \
+    dev-cpp/eigen
+
+
+# Got: dev-python/m2crypto
+# building 'M2Crypto._m2crypto' extension
+# swigging SWIG/_m2crypto.i to SWIG/_m2crypto_wrap.c
+# swig -python -D__i386__ -I/tmp/gentoo/usr/include/python2.7 -I/tmp/gentoo/usr/include -I/tmp/gentoo/usr/include/openssl -I/data/home/nao/gentoo/usr/x86_64-pc-linux-gnu/gcc-bin/8.2.0/../../../lib/gcc/x86_64-pc-linux-gnu/8.2.0/include -I/data/home/nao/gentoo/usr/x86_64-pc-linux-gnu/gcc-bin/8.2.0/../../../lib/gcc/x86_64-pc-linux-gnu/8.2.0/include-fixed -I/tmp/gentoo/usr/include -includeall -modern -builtin -outdir /data/home/nao/gentoo/var/tmp/portage/dev-python/m2crypto-0.31.0/work/M2Crypto-0.31.0/M2Crypto -o SWIG/_m2crypto_wrap.c SWIG/_m2crypto.i
+# /tmp/gentoo/usr/include/openssl/opensslconf.h:13: Error: CPP #error ""abi_x86_32 not supported by the package."". Use the -cpperraswarn option to continue swig processing.
 
 # media-sound/pulseaudio
 
