@@ -71,7 +71,8 @@ RUN emerge ros-kinetic/image_common \
     ros-kinetic/tf2_geometry_msgs \
     ros-kinetic/ros_numpy \
     ros-kinetic/ddynamic_reconfigure_python
-RUN emerge ros-kinetic/pepper_meshes
+# RUN emerge ros-kinetic/pepper_meshes
+# dev-java/icedtea-web-1.6.2 failed
 RUN emerge ros-kinetic/navigation
 RUN emerge ros-kinetic/slam_gmapping
 RUN emerge ros-kinetic/depthimage_to_laserscan
