@@ -87,6 +87,8 @@ RUN emerge ros-kinetic/image_common \
 RUN emerge ros-kinetic/navigation
 RUN emerge ros-kinetic/slam_gmapping
 RUN emerge ros-kinetic/depthimage_to_laserscan
+# workaround for rosbridge suite
+RUN pip install --user m2crypto
 RUN emerge ros-kinetic/rosbridge_suite
 RUN emerge ros-kinetic/cmake_modules \
     ros-kinetic/naoqi_bridge_msgs \
