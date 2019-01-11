@@ -6,9 +6,9 @@ WORKDIR /home/nao
 # ENTRYPOINT ["/bin/bash"]
 
 # Download and extract the Gentoo Prefix + ROS desktop image
-RUN wget http://github.com/awesomebytes/ros_overlay_on_gentoo_prefix/releases/download/release%2F2018-12-28T02at16plus00at00/gentoo_on_tmp_with_ros-kinetic_desktop-amd64_2018-12-28T02at16plus00at00.tar.gz.part-00 &\
-    wget http://github.com/awesomebytes/ros_overlay_on_gentoo_prefix/releases/download/release%2F2018-12-28T02at16plus00at00/gentoo_on_tmp_with_ros-kinetic_desktop-amd64_2018-12-28T02at16plus00at00.tar.gz.part-01 &\
-    wget http://github.com/awesomebytes/ros_overlay_on_gentoo_prefix/releases/download/release%2F2018-12-28T02at16plus00at00/gentoo_on_tmp_with_ros-kinetic_desktop-amd64_2018-12-28T02at16plus00at00.tar.gz.part-02 &\
+RUN wget http://github.com/awesomebytes/ros_overlay_on_gentoo_prefix_32b/releases/download/release%2F2019-01-11T02at56plus00at00/gentoo_on_tmp_with_ros-kinetic_desktop-x86_2019-01-11T02at56plus00at00.tar.gz.part-00 &\
+    wget http://github.com/awesomebytes/ros_overlay_on_gentoo_prefix_32b/releases/download/release%2F2019-01-11T02at56plus00at00/gentoo_on_tmp_with_ros-kinetic_desktop-x86_2019-01-11T02at56plus00at00.tar.gz.part-01 &\
+    wget http://github.com/awesomebytes/ros_overlay_on_gentoo_prefix_32b/releases/download/release%2F2019-01-11T02at56plus00at00/gentoo_on_tmp_with_ros-kinetic_desktop-x86_2019-01-11T02at56plus00at00.tar.gz.part-02 &\
     wait &&\
     cat gentoo_on_tmp* > gentoo_on_tmp.tar.gz &&\
     rm gentoo_on_tmp*.part* &&\
@@ -87,9 +87,9 @@ RUN emerge ros-kinetic/image_common \
 RUN emerge ros-kinetic/navigation
 RUN emerge ros-kinetic/slam_gmapping
 RUN emerge ros-kinetic/depthimage_to_laserscan
-# workaround for rosbridge suite
-RUN echo "dev-python/m2crypto-0.31.0" >> /tmp/gentoo/etc/portage/profile/package.provided
-RUN pip install --user m2crypto
+# # workaround for rosbridge suite
+# RUN echo "dev-python/m2crypto-0.31.0" >> /tmp/gentoo/etc/portage/profile/package.provided
+# RUN pip install --user m2crypto
 RUN emerge ros-kinetic/rosbridge_suite
 RUN emerge ros-kinetic/cmake_modules \
     ros-kinetic/naoqi_bridge_msgs \
@@ -100,7 +100,7 @@ RUN emerge media-libs/portaudio \
     net-libs/libnsl \
     dev-cpp/eigen
 
-# media-sound/pulseaudio
+RUN emerge media-sound/pulseaudio
 
 # #     ros-kinetic/naoqi_libqicore \
 # #     ros-kinetic/naoqi_libqi \
