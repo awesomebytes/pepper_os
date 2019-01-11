@@ -88,7 +88,7 @@ RUN emerge ros-kinetic/navigation
 RUN emerge ros-kinetic/slam_gmapping
 RUN emerge ros-kinetic/depthimage_to_laserscan
 # workaround for rosbridge suite
-RUN echo "dev-python/m2crypto" >> /tmp/gentoo/etc/portage/profile/package.provided
+RUN echo "dev-python/m2crypto-0.31.0" >> /tmp/gentoo/etc/portage/profile/package.provided
 RUN pip install --user m2crypto
 RUN emerge ros-kinetic/rosbridge_suite
 RUN emerge ros-kinetic/cmake_modules \
