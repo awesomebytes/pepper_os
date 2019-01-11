@@ -88,6 +88,7 @@ RUN emerge ros-kinetic/navigation
 RUN emerge ros-kinetic/slam_gmapping
 RUN emerge ros-kinetic/depthimage_to_laserscan
 # workaround for rosbridge suite
+RUN echo "dev-python/m2crypto" >> /tmp/gentoo/etc/portage/profile/package.provided
 RUN pip install --user m2crypto
 RUN emerge ros-kinetic/rosbridge_suite
 RUN emerge ros-kinetic/cmake_modules \
@@ -98,13 +99,6 @@ RUN emerge ros-kinetic/cmake_modules \
 RUN emerge media-libs/portaudio \
     net-libs/libnsl \
     dev-cpp/eigen
-
-
-# Got: dev-python/m2crypto
-# building 'M2Crypto._m2crypto' extension
-# swigging SWIG/_m2crypto.i to SWIG/_m2crypto_wrap.c
-# swig -python -D__i386__ -I/tmp/gentoo/usr/include/python2.7 -I/tmp/gentoo/usr/include -I/tmp/gentoo/usr/include/openssl -I/data/home/nao/gentoo/usr/x86_64-pc-linux-gnu/gcc-bin/8.2.0/../../../lib/gcc/x86_64-pc-linux-gnu/8.2.0/include -I/data/home/nao/gentoo/usr/x86_64-pc-linux-gnu/gcc-bin/8.2.0/../../../lib/gcc/x86_64-pc-linux-gnu/8.2.0/include-fixed -I/tmp/gentoo/usr/include -includeall -modern -builtin -outdir /data/home/nao/gentoo/var/tmp/portage/dev-python/m2crypto-0.31.0/work/M2Crypto-0.31.0/M2Crypto -o SWIG/_m2crypto_wrap.c SWIG/_m2crypto.i
-# /tmp/gentoo/usr/include/openssl/opensslconf.h:13: Error: CPP #error ""abi_x86_32 not supported by the package."". Use the -cpperraswarn option to continue swig processing.
 
 # media-sound/pulseaudio
 
