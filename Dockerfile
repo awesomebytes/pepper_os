@@ -173,6 +173,25 @@ RUN pip install --user xxhash
 
 RUN pip install --user catkin_tools
 
+RUN emerge ros-kinetic/eband_local_planner
+RUN cd /tmp/gentoo/usr/local/portage/ros-kinetic/libg2o &&\
+    rm * &&\
+    wget https://raw.githubusercontent.com/ros/ros-overlay/b76f702b1acfa384f0c43679a1fe67ab4c1f99fe/ros-kinetic/libg2o/libg2o-2016.4.24.ebuild &&\
+    wget https://raw.githubusercontent.com/ros/ros-overlay/b76f702b1acfa384f0c43679a1fe67ab4c1f99fe/ros-kinetic/libg2o/metadata.xml &&\
+    ebuild libg2o-2016.4.24.ebuild manifest
+# # # undocumented dependency of teb_local_planner
+# RUN emerge sci-libs/suitesparse
+RUN cd /tmp/gentoo/etc/portage/patches/ros-kinetic &&\
+    mkdir -p libg2o-2016.4.24 &&\
+    cd libg2o-2016.4.24 &&\
+    wget https://gist.githubusercontent.com/awesomebytes/97aad67cbc86deb93a76ace964241848/raw/bc83232c2ff5df872db0d3d46d49aca1a78ecbc7/001-Debug-cholmod.patch &&\
+    wget https://gist.githubusercontent.com/awesomebytes/79bafc394be8389d6430393edf77be47/raw/faae7ba38692d05c841b0aa3495e1618a3a70ca0/002-Hardcode-BLAS.patch
+RUN emerge sci-libs/cholmod
+RUN emerge ros-kinetic/libg2o
+RUN emerge ros-kinetic/teb_local_planner
+RUN emerge ros-kinetic/dwa_local_planner
+RUN emerge ros-kinetic/SPBL_lattice_planner
+
 # Fix all python shebangs
 RUN cd ~/.local/bin &&\
     find ./ -type f -exec sed -i -e 's/\#\!\/usr\/bin\/python2.7/\#\!\/tmp\/gentoo\/usr\/bin\/python2.7/g' {} \;
