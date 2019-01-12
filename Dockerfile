@@ -3,8 +3,6 @@ FROM awesomebytes/pepper_2.5.5.5
 USER nao
 WORKDIR /home/nao
 
-# ENTRYPOINT ["/bin/bash"]
-
 # Download and extract the Gentoo Prefix + ROS desktop image
 RUN wget http://github.com/awesomebytes/ros_overlay_on_gentoo_prefix_32b/releases/download/release%2F2019-01-11T02at56plus00at00/gentoo_on_tmp_with_ros-kinetic_desktop-x86_2019-01-11T02at56plus00at00.tar.gz.part-00 &\
     wget http://github.com/awesomebytes/ros_overlay_on_gentoo_prefix_32b/releases/download/release%2F2019-01-11T02at56plus00at00/gentoo_on_tmp_with_ros-kinetic_desktop-x86_2019-01-11T02at56plus00at00.tar.gz.part-01 &\
@@ -136,10 +134,6 @@ RUN emerge ros-kinetic/gscam
 
 RUN pip install --user pysqlite
 RUN pip install --user ipython
-# # Fix all python shebangs
-# RUN cd ~/.local/bin &&\
-#     find ./ -type f -exec sed -i -e 's/\#\!\/usr\/bin\/python2.7/\#\!\/tmp\/gentoo\/usr\/bin\/python2.7/g' {} \;
-
 RUN pip install --user --upgrade numpy
 RUN pip install --user scipy
 RUN pip install --user pytz
@@ -147,6 +141,15 @@ RUN pip install --user wstool
 
 RUN pip install --user Theano
 RUN pip install --user keras
+RUN mkdir -p ~/.keras && \
+echo '\
+{\
+    "image_data_format": "channels_last",\
+    "epsilon": 1e-07,\
+    "floatx": "float32",\
+    "backend": "theano"\
+}' > ~/.keras/keras.json
+
 
 # # Tensorflow pending from our custom compiled one...
 # # Which would be nice to automate too
@@ -163,41 +166,48 @@ RUN pip install --user dlib
 RUN pip install --user ipython
 RUN pip install --user jupyter
 
-# # Fix system stuff to not pull from .local python libs 
-# RUN echo "import sys\n\
-# if sys.executable.startswith('/usr/bin/python'):\n\
-#     sys.path = [p for p in sys.path if not p.startswith('/home/nao/.local')]" >> /home/nao/.local/lib/python2.7/site-packages/sitecustomize.py
+RUN pip install --user https://github.com/awesomebytes/pepper_os/releases/download/upload_tensorflow-1.6.0/tensorflow-1.6.0-cp27-cp27mu-linux_i686.whl
 
-# source /tmp/gentoo/opt/ros/kinetic/setup.bash
-# export ROS_LANG_DISABLE=genlisp:geneus
-# export CATKIN_PREFIX_PATH=/tmp/gentoo/opt/ros/kinetic
+RUN pip install --user xxhash
+
+# Fix all python shebangs
+RUN cd ~/.local/bin &&\
+    find ./ -type f -exec sed -i -e 's/\#\!\/usr\/bin\/python2.7/\#\!\/tmp\/gentoo\/usr\/bin\/python2.7/g' {} \;
+
+
+# # Fix system stuff to not pull from .local python libs 
+RUN echo "import sys\n\
+if sys.executable.startswith('/usr/bin/python'):\n\
+    sys.path = [p for p in sys.path if not p.startswith('/home/nao/.local')]" >> /home/nao/.local/lib/python2.7/site-packages/sitecustomize.py
 
 # TODO: add bash
-# echo "
-# # Check if the link exists in /tmp/gentoo
-# # If it doesn't exist, create it
-# if [ ! -L /tmp/gentoo ]; then
-#   echo 'Softlink to this Gentoo Prefix in /tmp/gentoo does not exist, creating it...'
-#   cd /tmp
-#   ln -s /home/nao/gentoo gentoo
-# fi
+RUN echo "# Check if the link exists in /tmp/gentoo\
+# If it doesn't exist, create it\
+if [ ! -L /tmp/gentoo ]; then\
+  echo 'Softlink to this Gentoo Prefix in /tmp/gentoo does not exist, creating it...'\
+  cd /tmp\
+  ln -s /home/nao/gentoo gentoo\
+fi\
+\
+# If not running interactively, don't do anything\
+case $- in\
+    *i*) ;;\
+      *) return;;\
+esac\
+\
+# This takes care of initializing the ROS Pepperfix environment\
+if [[ $SHELL != /tmp/gentoo/bin/bash ]] ; then\
+    exec /tmp/gentoo/startprefix\
+fi\
+export PATH=~/.local/bin:$PATH\
+# Source ROS Kinetic on Gentoo Prefix\
+source /tmp/gentoo/opt/ros/kinetic/setup.bash\
+export CATKIN_PREFIX_PATH=/tmp/gentoo/opt/ros/kinetic\
+export ROS_LANG_DISABLE=genlisp:geneus" >> .bashrc
 
-# # If not running interactively, don't do anything
-# case $- in
-#     *i*) ;;
-#       *) return;;
-# esac
+# For the booting for the robot we will need to redo
+# ~/naoqi/preferences/autoload.ini
 
-# # This takes care of initializing the ROS Pepperfix environment
-# if [[ $SHELL != /tmp/gentoo/bin/bash ]] ; then
-#     exec /tmp/gentoo/startprefix
-# fi
-# # Source ROS Kinetic on Gentoo Prefix
-# source /tmp/gentoo/opt/ros/kinetic/setup.bash
-# " >> .bashrc
+# also https://github.com/uts-magic-lab/command_executer
 
-
-
-# etc etc
-# ENTRYPOINT ["/bin/bash"]
 ENTRYPOINT ["/tmp/gentoo/startprefix"]
