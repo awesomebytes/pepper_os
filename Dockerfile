@@ -178,12 +178,12 @@ RUN cd ~/.local/bin &&\
 
 
 # # Fix system stuff to not pull from .local python libs 
-RUN echo "import sys\n\
+RUN echo -e "import sys\n\
 if sys.executable.startswith('/usr/bin/python'):\n\
     sys.path = [p for p in sys.path if not p.startswith('/home/nao/.local')]" >> /home/nao/.local/lib/python2.7/site-packages/sitecustomize.py
 
 # TODO: add bash
-RUN echo "# Check if the link exists in /tmp/gentoo\n\
+RUN echo -e "# Check if the link exists in /tmp/gentoo\n\
 # If it doesn't exist, create it\n\
 if [ ! -L /tmp/gentoo ]; then\n\
   echo 'Softlink to this Gentoo Prefix in /tmp/gentoo does not exist, creating it...'\n\
