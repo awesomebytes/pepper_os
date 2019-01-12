@@ -104,7 +104,7 @@ RUN emerge media-sound/pulseaudio
 
 RUN emerge ros-kinetic/pepper_meshes
 
-COPY patched_packages/mbf_* /tmp/gentoo/usr/local/portage/ros-kinetic
+COPY ros-kinetic/ /tmp/gentoo/usr/local/portage/
 
 RUN emerge ros-kinetic/move_base_flex
 
