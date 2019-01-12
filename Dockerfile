@@ -159,10 +159,11 @@ RUN pip install --user pyaudio
 RUN pip install --user SpeechRecognition
 RUN pip install --user nltk
 RUN pip install --user pydub
-# TODO: binarize dlib, takes long to self compile
 RUN pip install --user dlib
+RUN pip install --user ipython
+RUN pip install --user jupyter
 
-# # Fix system stuff to not pull from .local python libs
+# # Fix system stuff to not pull from .local python libs 
 # RUN echo "import sys\n\
 # if sys.executable.startswith('/usr/bin/python'):\n\
 #     sys.path = [p for p in sys.path if not p.startswith('/home/nao/.local')]" >> /home/nao/.local/lib/python2.7/site-packages/sitecustomize.py
