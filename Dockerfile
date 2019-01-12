@@ -188,6 +188,10 @@ RUN cd /tmp/gentoo/etc/portage/patches/ros-kinetic &&\
     wget https://gist.githubusercontent.com/awesomebytes/79bafc394be8389d6430393edf77be47/raw/faae7ba38692d05c841b0aa3495e1618a3a70ca0/002-Hardcode-BLAS.patch
 RUN emerge sci-libs/cholmod
 RUN emerge ros-kinetic/libg2o
+RUN cd /tmp/gentoo/etc/portage/patches/ros-kinetic &&\
+    mkdir -p teb_local_planner &&\
+    cd teb_local_planner &&\
+    wget https://gist.githubusercontent.com/awesomebytes/0e84ce3539cdbe6d8013a75f17de34a1/raw/c72c8d4f7d307e553629f18dab1c11d184e5295d/0001-Adapt-for-Gentoo-Prefix-on-tmp-gentoo.patch
 RUN emerge ros-kinetic/teb_local_planner
 RUN emerge ros-kinetic/dwa_local_planner
 RUN emerge ros-kinetic/SPBL_lattice_planner
