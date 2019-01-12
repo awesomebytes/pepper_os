@@ -179,33 +179,33 @@ RUN cd ~/.local/bin &&\
 
 
 # # Fix system stuff to not pull from .local python libs 
-RUN echo -e "import sys\
-if sys.executable.startswith('/usr/bin/python'):\
+RUN echo -e "import sys\n\
+if sys.executable.startswith('/usr/bin/python'):\n\
     sys.path = [p for p in sys.path if not p.startswith('/home/nao/.local')]" >> /home/nao/.local/lib/python2.7/site-packages/sitecustomize.py
 
 # TODO: add bash
-RUN echo -e '# Check if the link exists in /tmp/gentoo\
-# If it doesn\'t exist, create it\
-if [ ! -L /tmp/gentoo ]; then\
-  echo "Softlink to this Gentoo Prefix in /tmp/gentoo does not exist, creating it..."\
-  cd /tmp\
-  ln -s /home/nao/gentoo gentoo\
-fi\
-\
-# If not running interactively, don\'t do anything\
-case $- in\
-    *i*) ;;\
-      *) return;;\
-esac\
-\
-# This takes care of initializing the ROS Pepperfix environment\
-if [[ $SHELL != /tmp/gentoo/bin/bash ]] ; then\
-    exec /tmp/gentoo/startprefix\
-fi\
-export PATH=~/.local/bin:$PATH\
-# Source ROS Kinetic on Gentoo Prefix\
-source /tmp/gentoo/opt/ros/kinetic/setup.bash\
-export CATKIN_PREFIX_PATH=/tmp/gentoo/opt/ros/kinetic\
+RUN echo -e '# Check if the link exists in /tmp/gentoo\n\
+# If it doesn\'t exist, create it\n\
+if [ ! -L /tmp/gentoo ]; then\n\
+  echo "Softlink to this Gentoo Prefix in /tmp/gentoo does not exist, creating it..."\n\
+  cd /tmp\n\
+  ln -s /home/nao/gentoo gentoo\n\
+fi\n\
+\n\
+# If not running interactively, don\'t do anything\n\
+case $- in\n\
+    *i*) ;;\n\
+      *) return;;\n\
+esac\n\
+\n\
+# This takes care of initializing the ROS Pepperfix environment\n\
+if [[ $SHELL != /tmp/gentoo/bin/bash ]] ; then\n\
+    exec /tmp/gentoo/startprefix\n\
+fi\n\
+export PATH=~/.local/bin:$PATH\n\
+# Source ROS Kinetic on Gentoo Prefix\n\
+source /tmp/gentoo/opt/ros/kinetic/setup.bash\n\
+export CATKIN_PREFIX_PATH=/tmp/gentoo/opt/ros/kinetic\n\
 export ROS_LANG_DISABLE=genlisp:geneus' >> .bashrc
 
 # For the booting for the robot we will need to redo
