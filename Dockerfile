@@ -83,15 +83,10 @@ RUN emerge ros-kinetic/image_common \
     ros-kinetic/tf2_geometry_msgs \
     ros-kinetic/ros_numpy \
     ros-kinetic/ddynamic_reconfigure_python
-# RUN emerge ros-kinetic/pepper_meshes
-# dev-java/icedtea-web-1.6.2 failed
 
 RUN emerge ros-kinetic/navigation
 RUN emerge ros-kinetic/slam_gmapping
 RUN emerge ros-kinetic/depthimage_to_laserscan
-# # workaround for rosbridge suite
-# RUN echo "dev-python/m2crypto-0.31.0" >> /tmp/gentoo/etc/portage/profile/package.provided
-# RUN pip install --user m2crypto
 RUN emerge ros-kinetic/rosbridge_suite
 RUN emerge ros-kinetic/cmake_modules \
     ros-kinetic/naoqi_bridge_msgs \
@@ -106,6 +101,12 @@ RUN emerge media-libs/portaudio \
 RUN echo ">=media-plugins/alsa-plugins-1.1.7-r1" >> /tmp/gentoo/etc/portage/package.mask
 RUN echo ">=media-plugins/alsa-plugins-1.1.6 pulseaudio" >> /tmp/gentoo/etc/portage/package.use
 RUN emerge media-sound/pulseaudio
+
+RUN emerge ros-kinetic/pepper_meshes
+
+COPY patched_packages/mbf_* /tmp/gentoo/usr/local/portage/ros-kinetic
+
+RUN emerge ros-kinetic/move_base_flex
 
 # #     ros-kinetic/naoqi_libqicore \
 # #     ros-kinetic/naoqi_libqi \
