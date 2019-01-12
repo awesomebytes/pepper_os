@@ -194,7 +194,7 @@ RUN cd /tmp/gentoo/etc/portage/patches/ros-kinetic &&\
     wget https://gist.githubusercontent.com/awesomebytes/0e84ce3539cdbe6d8013a75f17de34a1/raw/c72c8d4f7d307e553629f18dab1c11d184e5295d/0001-Adapt-for-Gentoo-Prefix-on-tmp-gentoo.patch
 RUN emerge ros-kinetic/teb_local_planner
 RUN emerge ros-kinetic/dwa_local_planner
-RUN emerge ros-kinetic/SPBL_lattice_planner
+RUN emerge ros-kinetic/sbpl_lattice_planner
 
 # Fix all python shebangs
 RUN cd ~/.local/bin &&\
