@@ -102,6 +102,8 @@ RUN emerge media-libs/portaudio \
     net-libs/libnsl \
     dev-cpp/eigen
 
+# To avoid: https://bugs.gentoo.org/673464
+RUN echo ">=media-plugins/alsa-plugins-1.1.8" >> /tmp/gentoo/etc/portage/package.mask
 RUN emerge media-sound/pulseaudio
 
 # #     ros-kinetic/naoqi_libqicore \
