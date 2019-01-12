@@ -170,6 +170,8 @@ RUN pip install --user https://github.com/awesomebytes/pepper_os/releases/downlo
 
 RUN pip install --user xxhash
 
+RUN pip install --user catkin_tools
+
 # Fix all python shebangs
 RUN cd ~/.local/bin &&\
     find ./ -type f -exec sed -i -e 's/\#\!\/usr\/bin\/python2.7/\#\!\/tmp\/gentoo\/usr\/bin\/python2.7/g' {} \;
