@@ -134,33 +134,33 @@ RUN emerge ros-kinetic/gscam
 # #     ros-kinetic/web_video_server \
 # # CODEC_FLAG_GLOBAL_HEADER -> AV_CODEC_FLAG_GLOBAL_HEADER
 
-# RUN pip install --user pysqlite
-# RUN pip install --user ipython
+RUN pip install --user pysqlite
+RUN pip install --user ipython
 # # Fix all python shebangs
 # RUN cd ~/.local/bin &&\
 #     find ./ -type f -exec sed -i -e 's/\#\!\/usr\/bin\/python2.7/\#\!\/tmp\/gentoo\/usr\/bin\/python2.7/g' {} \;
 
-# RUN pip install --user --upgrade numpy
-# RUN pip install --user scipy
-# RUN pip install --user pytz
-# RUN pip install --user wstool
+RUN pip install --user --upgrade numpy
+RUN pip install --user scipy
+RUN pip install --user pytz
+RUN pip install --user wstool
 
-# RUN pip install --user Theano
-# RUN pip install --user keras
+RUN pip install --user Theano
+RUN pip install --user keras
 
 # # Tensorflow pending from our custom compiled one...
 # # Which would be nice to automate too
 
-# RUN pip install --user h5py
-# RUN pip install --user opencv-python opencv-contrib-python
+RUN pip install --user h5py
+RUN pip install --user opencv-python opencv-contrib-python
 
-# RUN pip install --user pyaudio
+RUN pip install --user pyaudio
 
-# RUN pip install --user SpeechRecognition
-# RUN pip install --user nltk
-# RUN pip install --user pydub
-# # TODO: binarize dlib, takes long to self compile
-# RUN pip install --user dlib
+RUN pip install --user SpeechRecognition
+RUN pip install --user nltk
+RUN pip install --user pydub
+# TODO: binarize dlib, takes long to self compile
+RUN pip install --user dlib
 
 # # Fix system stuff to not pull from .local python libs
 # RUN echo "import sys\n\
