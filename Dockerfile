@@ -64,12 +64,14 @@ RUN cd /tmp/gentoo/opt &&\
 
 # TODO: Need to fix https://bugs.gentoo.org/673464
 
-# Navigation needs it
-# RUN mkdir -p /tmp/gentoo/etc/portage/patches/sci-libs/pcl-1.8.1 && \
-#     cd /tmp/gentoo/etc/portage/patches/sci-libs/pcl-1.8.1 && \
-#     wget https://664126.bugs.gentoo.org/attachment.cgi?id=545428 -O gcc8.patch
-# RUN echo ">=sci-libs/pcl-1.9.1" >> /tmp/gentoo/etc/portage/package.mask
-# RUN emerge sci-libs/pcl
+# Navigation needs it becuase of ros-kinetic/move_slow_and_clear
+# Giving error: 
+RUN mkdir -p /tmp/gentoo/etc/portage/patches/sci-libs/pcl-1.8.1 && \
+    cd /tmp/gentoo/etc/portage/patches/sci-libs/pcl-1.8.1 && \
+    wget https://664126.bugs.gentoo.org/attachment.cgi?id=545428 -O gcc8.patch
+RUN echo ">=sci-libs/pcl-1.9.1" >> /tmp/gentoo/etc/portage/package.mask
+RUN echo "=sci-libs/pcl-1.8.1 **" >> /tmp/gentoo/etc/portage/package.accept_keywords
+RUN emerge sci-libs/pcl
 
 RUN emerge ros-kinetic/robot_state_publisher \
     ros-kinetic/geometry2 \
