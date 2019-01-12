@@ -125,11 +125,12 @@ RUN cd /tmp/gentoo/usr/local/portage/ros-kinetic && \
 
 RUN emerge ros-kinetic/move_base_flex
 
+RUN emerge ros-kinetic/gscam
+
 # #     ros-kinetic/naoqi_libqicore \
 # #     ros-kinetic/naoqi_libqi \
 # # need the patches I made in ros_pepperfix
-# #     ros-kinetic/move_base_flex
-# # needs some dependency
+
 # #     ros-kinetic/web_video_server \
 # # CODEC_FLAG_GLOBAL_HEADER -> AV_CODEC_FLAG_GLOBAL_HEADER
 
