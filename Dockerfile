@@ -104,7 +104,7 @@ RUN emerge media-sound/pulseaudio
 
 RUN emerge ros-kinetic/pepper_meshes
 
-COPY ros-kinetic/ /tmp/gentoo/usr/local/portage/ros-kinetic
+COPY --chown=nao ros-kinetic/ /tmp/gentoo/usr/local/portage/ros-kinetic
 RUN cd /tmp/gentoo/usr/local/portage/ros-kinetic && \
     rm -f mbf_abstract_core/Manifest && \
     rm -f mbf_msgs/Manifest && \
