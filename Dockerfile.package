@@ -1,0 +1,5 @@
+from awesomebytes/pepper_os_image
+
+RUN tar cvzf /tmp/pepper_os.tar.gz gentoo .local .bashrc .keras
+
+ENTRYPOINT ["/tmp/gentoo/startprefix"]

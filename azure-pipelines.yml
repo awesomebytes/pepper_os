@@ -37,66 +37,65 @@ jobs:
       condition: always()
 
  
-  # - job: package_stage
-  #   timeoutInMinutes: 0
-  #   dependsOn: "build_pepper_os_1"
+  - job: package_stage
+    timeoutInMinutes: 0
+    dependsOn: "build_pepper_os_1"
 
-  #   pool:
-  #     vmImage: 'Ubuntu 16.04'
+    pool:
+      vmImage: 'Ubuntu 16.04'
 
-  #   variables:
-  #     docker_image_name: pepper_os_image_package_stage
-  #     platform: x86
-  #     rosdistro: ros-kinetic
-  #     bundlename: pepper_os
+    variables:
+      docker_image_name: pepper_os_image_package_stage
+      platform: x86
+      rosdistro: ros-kinetic
 
-  #   steps:
-  #   # The variables are set on the Build options on the web interface
-  #   - script: docker login -u $(DockerHub_user) -p $(DockerHub_password)
-  #     displayName: 'docker login'
+    steps:
+    # The variables are set on the Build options on the web interface
+    - script: docker login -u $(DockerHub_user) -p $(DockerHub_password)
+      displayName: 'docker login'
 
-  #   - script: cd package_stage && docker build -f Dockerfile.desktop -t $(DockerHub_user)/$(docker_image_name):$(Build.BuildId) .
-  #     displayName: 'docker build package_stage'
-  #     # This means up to 6h
-  #     timeoutInMinutes: 0
-  #     # Even if it fails I want to push the image to DockerHub for inspection
-  #   - script: docker tag `docker ps -a -l -q | xargs docker commit | awk -F":" '{print $2}'` $(DockerHub_user)/$(docker_image_name):$(Build.BuildId)
-  #     displayName: 'create image to push to DockerHub'
-  #     condition: failed()
-  #   # Push it
-  #   - script: docker push $(DockerHub_user)/$(docker_image_name):$(Build.BuildId)
-  #     displayName: 'push image to DockerHub'
-  #     condition: always()
-  #   # Tag as :latest too
-  #   - script: docker tag $(DockerHub_user)/$(docker_image_name):$(Build.BuildId) $(DockerHub_user)/$(docker_image_name):latest
-  #     displayName: 'tag as latest'
-  #     condition: always()
-  #   # Push as latest
-  #   - script: docker push $(DockerHub_user)/$(docker_image_name):latest
-  #     displayName: 'push latest to DockerHub'
-  #     condition: always()
+    - script: docker build -f Dockerfile.package -t $(DockerHub_user)/$(docker_image_name):$(Build.BuildId) .
+      displayName: 'docker build package_stage'
+      # This means up to 6h
+      timeoutInMinutes: 0
+      # Even if it fails I want to push the image to DockerHub for inspection
+    - script: docker tag `docker ps -a -l -q | xargs docker commit | awk -F":" '{print $2}'` $(DockerHub_user)/$(docker_image_name):$(Build.BuildId)
+      displayName: 'create image to push to DockerHub'
+      condition: failed()
+    # Push it
+    - script: docker push $(DockerHub_user)/$(docker_image_name):$(Build.BuildId)
+      displayName: 'push image to DockerHub'
+      condition: always()
+    # Tag as :latest too
+    - script: docker tag $(DockerHub_user)/$(docker_image_name):$(Build.BuildId) $(DockerHub_user)/$(docker_image_name):latest
+      displayName: 'tag as latest'
+      condition: always()
+    # Push as latest
+    - script: docker push $(DockerHub_user)/$(docker_image_name):latest
+      displayName: 'push latest to DockerHub'
+      condition: always()
 
-  #   # Create a temporal container to copy the gentoo_on_tmp.tar.gz
-  #   - script: |
-  #       id=$(docker create $(DockerHub_user)/$(docker_image_name))
-  #       docker cp $id:/tmp/gentoo_on_tmp.tar.gz $HOME
-  #     displayName: 'Extract gentoo_on_tmp.tar.gz from Docker image'
-  #   # Not really needed
-  #   # - script: docker rm -v $id
-  #   # Make a release
-  #   - script: python -m pip install --upgrade pip setuptools wheel
-  #     displayName: 'Install tools'
-  #   - script: python -m pip install --user githubrelease
-  #     displayName: 'Install tools 2'
-  #   - script: |
-  #       export DATE=$(date -I'minutes' | sed 's/+/plus/g'| sed 's/:/at/g')
-  #       export RELEASE_TAG=release/${DATE}
-  #       export RELEASE_FILE_NAME=gentoo_on_tmp_with_$(rosdistro)_$(bundlename)-${PLATFORM}_${DATE}.tar.gz
-  #       export RELEASE_NAME="Gentoo Prefix on /tmp/gentoo with ROS $(bundlename)"
-  #       export BODY="Use ROS Kinetic on Gentoo Prefix with: cat ${RELEASE_FILE_NAME}.part-* > ${RELEASE_FILE_NAME}; tar xvf gentoo_on_tmp*.tar.gz; ./gentoo/startprefix"
-  #       mv $HOME/gentoo_on_tmp.tar.gz ${RELEASE_FILE_NAME}
-  #       split -b 1024MB -d ${RELEASE_FILE_NAME} ${RELEASE_FILE_NAME}.part-
-  #       export PATH=$HOME/.local/bin:$PATH
-  #       export PYTHONPATH=$HOME/.local/lib/python2.7/site-packages:$PYTHONPATH
-  #       githubrelease --github-token $(GitHub_Token) release $(Build.Repository.Name) create "${RELEASE_TAG}" --publish --name "${RELEASE_NAME}" --body "${BODY}" "${RELEASE_FILE_NAME}.part-*"
-  #     displayName: 'Create Release'
+    # Create a temporal container to copy the pepper_os.tar.gz
+    - script: |
+        id=$(docker create $(DockerHub_user)/$(docker_image_name))
+        docker cp $id:/tmp/pepper_os.tar.gz $HOME
+      displayName: 'Extract pepper_os.tar.gz from Docker image'
+    # Not really needed
+    # - script: docker rm -v $id
+    # Make a release
+    - script: python -m pip install --upgrade pip setuptools wheel
+      displayName: 'Install tools'
+    - script: python -m pip install --user githubrelease
+      displayName: 'Install tools 2'
+    - script: |
+        export DATE=$(date -I'minutes' | sed 's/+/plus/g'| sed 's/:/at/g')
+        export RELEASE_TAG=release/${DATE}
+        export RELEASE_FILE_NAME=pepper_os_$(rosdistro)-${PLATFORM}_${DATE}.tar.gz
+        export RELEASE_NAME="Pepper OS based on Gentoo Prefix and ROS"
+        export BODY="Extract with: cat ${RELEASE_FILE_NAME}.part-* > ${RELEASE_FILE_NAME}; tar xvf pepper_os*.tar.gz; ./gentoo/startprefix"
+        mv $HOME/pepper_os.tar.gz ${RELEASE_FILE_NAME}
+        split -b 1024MB -d ${RELEASE_FILE_NAME} ${RELEASE_FILE_NAME}.part-
+        export PATH=$HOME/.local/bin:$PATH
+        export PYTHONPATH=$HOME/.local/lib/python2.7/site-packages:$PYTHONPATH
+        githubrelease --github-token $(GitHub_Token) release $(Build.Repository.Name) create "${RELEASE_TAG}" --publish --name "${RELEASE_NAME}" --body "${BODY}" "${RELEASE_FILE_NAME}.part-*"
+      displayName: 'Create Release'
