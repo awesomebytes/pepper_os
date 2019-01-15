@@ -177,6 +177,8 @@ RUN emerge ros-kinetic/teb_local_planner
 RUN emerge ros-kinetic/dwa_local_planner
 RUN emerge ros-kinetic/sbpl_lattice_planner
 
+RUN emerge media-libs/gst-plugins-good
+
 # Fix all python shebangs
 RUN cd ~/.local/bin &&\
     find ./ -type f -exec sed -i -e 's/\#\!\/usr\/bin\/python2.7/\#\!\/tmp\/gentoo\/usr\/bin\/python2.7/g' {} \;
