@@ -95,6 +95,8 @@ RUN emerge media-libs/portaudio \
     net-libs/libnsl \
     dev-cpp/eigen
 
+RUN emerge media-libs/opus
+
 # To avoid: https://bugs.gentoo.org/673464
 RUN echo ">=media-plugins/alsa-plugins-1.1.7-r1" >> /tmp/gentoo/etc/portage/package.mask
 RUN echo ">=media-plugins/alsa-plugins-1.1.6 pulseaudio" >> /tmp/gentoo/etc/portage/package.use
@@ -189,7 +191,10 @@ RUN echo -e "import sys\n\
 if sys.executable.startswith('/usr/bin/python'):\n\
     sys.path = [p for p in sys.path if not p.startswith('/home/nao/.local')]" >> /home/nao/.local/lib/python2.7/site-packages/sitecustomize.py
 
-# TODO: add bash
+# Enable pulseaudio if anyone manually executes startprefix
+# Adding to the line 'RETAIN="HOME=$HOME TERM=$TERM USER=$USER SHELL=$SHELL"'
+RUN sed 's/SHELL=$SHELL/SHELL=$SHELL XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR/g' /tmp/gentoo/startprefix_original
+
 RUN echo -e '# Check if the link exists in /tmp/gentoo\n\
 # If it doesn\'t exist, create it\n\
 if [ ! -L /tmp/gentoo ]; then\n\
@@ -204,15 +209,35 @@ case $- in\n\
       *) return;;\n\
 esac\n\
 \n\
-# This takes care of initializing the ROS Pepperfix environment\n\
-if [[ $SHELL != /tmp/gentoo/bin/bash ]] ; then\n\
-    exec /tmp/gentoo/startprefix\n\
+# Otherwise, check if we are in prefixed environment, if not, go in it\n\
+if grep -q '/tmp/gentoo/bin/bash' /proc/$$/cmdline ; then\n\
+    :\n\
+else\n\
+    EPREFIX=/tmp/gentoo\n\
+    SHELL=/tmp/gentoo/bin/bash\n\
+    echo "Entering ROS Pepperfix ${EPREFIX}"\n\
+    # start the login shell, clean the entire environment but what\'s needed\n\
+    RETAIN="HOME=$HOME TERM=$TERM USER=$USER SHELL=$SHELL XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR"\n\
+    # PROFILEREAD is necessary on SUSE not to wipe the env on shell start\n\
+    [[ -n ${PROFILEREAD} ]] && RETAIN+=" PROFILEREAD=$PROFILEREAD"\n\
+    # ssh-agent is handy to keep, of if set, inherit it\n\
+    [[ -n ${SSH_AUTH_SOCK} ]] && RETAIN+=" SSH_AUTH_SOCK=$SSH_AUTH_SOCK"\n\
+    # if we\'re on some X terminal, makes sense to inherit that too\n\
+    [[ -n ${DISPLAY} ]] && RETAIN+=" DISPLAY=$DISPLAY"\n\
+    # do it!\n\
+    env -i $RETAIN $SHELL -l\n\
+    # Note that the new shell will source .bashrc too\n\
 fi\n\
+\n\
 export PATH=~/.local/bin:$PATH\n\
+export PYTHONPATH=/home/nao/pynaoqi-python2.7-2.5.5.5-linux32/lib/python2.7/site-packages\n\
 # Source ROS Kinetic on Gentoo Prefix\n\
 source /tmp/gentoo/opt/ros/kinetic/setup.bash\n\
 export CATKIN_PREFIX_PATH=/tmp/gentoo/opt/ros/kinetic\n\
-export ROS_LANG_DISABLE=genlisp:geneus' >> .bashrc
+export ROS_LANG_DISABLE=genlisp:geneus\n\
+# Given this is only for user shells, we may be alright using just localhost\n\
+# export ROS_IP=$(ifconfig wlan0 | grep "inet " | awk \'{print $2}\')\n\
+export ROS_IP=127.0.0.1' >> .bashrc
 
 # For the booting for the robot we will need to redo
 # ~/naoqi/preferences/autoload.ini
