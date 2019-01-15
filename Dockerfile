@@ -180,6 +180,7 @@ RUN emerge ros-kinetic/dwa_local_planner
 RUN emerge ros-kinetic/sbpl_lattice_planner
 
 RUN emerge media-libs/gst-plugins-good
+RUN emerge media-plugins/gst-plugins-v4l2
 
 # Install in our locally known path pynaoqi (to avoid sourcing /opt/aldebaran/lib/python2.7...)
 RUN wget https://github.com/awesomebytes/pepper_os/releases/download/pynaoqi-python2.7-2.5.5.5-linux32/pynaoqi-python2.7-2.5.5.5-linux32.tar.gz &&\
