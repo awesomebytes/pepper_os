@@ -102,25 +102,6 @@ RUN emerge media-sound/pulseaudio
 
 RUN emerge ros-kinetic/pepper_meshes
 
-COPY --chown=nao ros-kinetic/ /tmp/gentoo/usr/local/portage/ros-kinetic
-RUN cd /tmp/gentoo/usr/local/portage/ros-kinetic && \
-    rm -f mbf_abstract_core/Manifest && \
-    rm -f mbf_msgs/Manifest && \
-    rm -f mbf_costmap_nav/Manifest && \
-    rm -f mbf_costmap_core/Manifest && \
-    rm -f mbf_utility/Manifest && \
-    rm -f move_base_flex/Manifest
-RUN cd /tmp/gentoo/usr/local/portage/ros-kinetic && \
-    ebuild mbf_abstract_core/mbf_abstract_core-0.2.3.ebuild manifest && \
-    ebuild mbf_msgs/mbf_msgs-0.2.3.ebuild manifest && \
-    ebuild mbf_abstract_nav/mbf_abstract_nav-0.2.3.ebuild manifest && \
-    ebuild mbf_costmap_core/mbf_costmap_core-0.2.3.ebuild manifest && \
-    ebuild mbf_abstract_core/mbf_abstract_core-0.2.3.ebuild manifest && \
-    ebuild mbf_simple_nav/mbf_simple_nav-0.2.3.ebuild manifest && \
-    ebuild mbf_costmap_nav/mbf_costmap_nav-0.2.3.ebuild manifest && \
-    ebuild mbf_utility/mbf_utility-0.2.3.ebuild manifest && \
-    ebuild move_base_flex/move_base_flex-0.2.3.ebuild manifest
-
 RUN emerge ros-kinetic/move_base_flex
 
 RUN emerge ros-kinetic/gscam
