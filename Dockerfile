@@ -106,8 +106,6 @@ RUN emerge ros-kinetic/pepper_meshes
 
 RUN emerge ros-kinetic/move_base_flex
 
-RUN emerge ros-kinetic/gscam
-
 # #     ros-kinetic/naoqi_libqicore \
 # #     ros-kinetic/naoqi_libqi \
 # # need the patches I made in ros_pepperfix
@@ -181,6 +179,14 @@ RUN emerge ros-kinetic/sbpl_lattice_planner
 
 RUN emerge media-libs/gst-plugins-good
 RUN emerge media-plugins/gst-plugins-v4l2
+RUN cd /tmp/gentoo/usr/local/portage/ros-kinetic/gscam &&\
+    wget  https://raw.githubusercontent.com/ros/ros-overlay/80a3d06744df220fadb34b638d94d4336af2b720/ros-kinetic/gscam/Manifest&&\
+    mkdir files && cd files &&\
+    wget https://raw.githubusercontent.com/ros/ros-overlay/80a3d06744df220fadb34b638d94d4336af2b720/ros-kinetic/gscam/files/0001-Prefer-Gstreamer-1.0-over-0.10.patch &&\
+    wget https://raw.githubusercontent.com/ros/ros-overlay/80a3d06744df220fadb34b638d94d4336af2b720/ros-kinetic/gscam/files/Add-CMAKE-flag-to-compile-with-Gstreamer-version-1.x.patch &&\
+    cd .. && wget https://raw.githubusercontent.com/ros/ros-overlay/80a3d06744df220fadb34b638d94d4336af2b720/ros-kinetic/gscam/gscam-1.0.1.ebuild &&\
+    ebuild gscam-1.0.1.ebuild manifest
+RUN emerge ros-kinetic/gscam
 
 # Install in our locally known path pynaoqi (to avoid sourcing /opt/aldebaran/lib/python2.7...)
 RUN wget https://github.com/awesomebytes/pepper_os/releases/download/pynaoqi-python2.7-2.5.5.5-linux32/pynaoqi-python2.7-2.5.5.5-linux32.tar.gz &&\
