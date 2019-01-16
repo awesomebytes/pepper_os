@@ -194,6 +194,8 @@ RUN wget https://github.com/awesomebytes/pepper_os/releases/download/pynaoqi-pyt
     rm pynaoqi-python2.7-2.5.5.5-linux32.tar.gz
 RUN ls
 
+RUN pip install --user dill
+
 # Fix all python shebangs
 RUN cd ~/.local/bin &&\
     find ./ -type f -exec sed -i -e 's/\#\!\/usr\/bin\/python2.7/\#\!\/tmp\/gentoo\/usr\/bin\/python2.7/g' {} \;
