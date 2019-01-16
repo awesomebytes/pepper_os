@@ -1,0 +1,5 @@
+from awesomebytes/pepper_os_image_from_previous
+
+RUN tar cvzf /tmp/pepper_os.tar.gz gentoo .local .bashrc .keras pynaoqi-python2.7-2.5.5.5-linux32
+
+ENTRYPOINT ["/tmp/gentoo/startprefix"]
