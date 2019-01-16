@@ -216,6 +216,17 @@ if [ ! -L /tmp/gentoo ]; then\n\
   ln -s /home/nao/gentoo gentoo\n\
 fi\n\
 \n\
+\n\
+export PATH=~/.local/bin:$PATH\n\
+export PYTHONPATH=/home/nao/pynaoqi-python2.7-2.5.5.5-linux32/lib/python2.7/site-packages\n\
+# Source ROS Kinetic on Gentoo Prefix\n\
+source /tmp/gentoo/opt/ros/kinetic/setup.bash\n\
+export CATKIN_PREFIX_PATH=/tmp/gentoo/opt/ros/kinetic\n\
+export ROS_LANG_DISABLE=genlisp:geneus\n\
+# Given this is only for user shells, we may be alright using just localhost\n\
+# export ROS_IP=$(ifconfig wlan0 | grep "inet " | awk \'{print $2}\')\n\
+export ROS_IP=127.0.0.1\n\
+\n\
 # If not running interactively, don\'t do anything\n\
 case $- in\n\
     *i*) ;;\n\
@@ -241,16 +252,7 @@ else\n\
     env -i $RETAIN $SHELL -l\n\
     # Note that the new shell will source .bashrc too\n\
 fi\n\
-\n\
-export PATH=~/.local/bin:$PATH\n\
-export PYTHONPATH=/home/nao/pynaoqi-python2.7-2.5.5.5-linux32/lib/python2.7/site-packages\n\
-# Source ROS Kinetic on Gentoo Prefix\n\
-source /tmp/gentoo/opt/ros/kinetic/setup.bash\n\
-export CATKIN_PREFIX_PATH=/tmp/gentoo/opt/ros/kinetic\n\
-export ROS_LANG_DISABLE=genlisp:geneus\n\
-# Given this is only for user shells, we may be alright using just localhost\n\
-# export ROS_IP=$(ifconfig wlan0 | grep "inet " | awk \'{print $2}\')\n\
-export ROS_IP=127.0.0.1' >> .bashrc
+' >> .bashrc
 
 # For the booting for the robot we will need to redo
 # ~/naoqi/preferences/autoload.ini
