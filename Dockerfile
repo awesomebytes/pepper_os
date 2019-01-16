@@ -195,6 +195,7 @@ RUN wget https://github.com/awesomebytes/pepper_os/releases/download/pynaoqi-pyt
 RUN ls
 
 RUN pip install --user dill
+RUN pip install --user cloudpickle
 
 # Fix all python shebangs
 RUN cd ~/.local/bin &&\
