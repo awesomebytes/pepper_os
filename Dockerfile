@@ -181,7 +181,7 @@ RUN EXTRA_ECONF="--enable-pulse" emerge media-libs/gst-plugins-good
 RUN emerge media-plugins/gst-plugins-opus \
     media-plugins/gst-plugins-v4l2 \
     media-plugins/gst-plugins-jpeg \
-    media-plugins/gst-plugins- \
+    media-plugins/gst-plugins-libpng \
     media-plugins/gst-plugins-lame
 RUN emerge media-plugins/gst-plugins-x264 media-plugins/gst-plugins-x265
 
