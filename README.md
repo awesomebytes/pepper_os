@@ -14,3 +14,7 @@ docker build --network host -f Dockerfile -t pepper_os .
 ```bash
 docker run -it -h pepper awesomebytes/pepper_os
 ```
+
+# buildfarm
+
+Link: https://dev.azure.com/ROOGP/ROOGP_CI/_build
