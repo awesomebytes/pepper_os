@@ -264,7 +264,7 @@ else\n\
     env -i $RETAIN $SHELL -l\n\
     # Note that the new shell will source .bashrc too\n\
 fi\n\
-' >> .bashrc
+' >> .bash_profile
 
 # For the booting for the robot we will need to redo
 # ~/naoqi/preferences/autoload.ini
