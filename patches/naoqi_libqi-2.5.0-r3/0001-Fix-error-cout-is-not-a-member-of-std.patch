@@ -1,0 +1,24 @@
+From 11d84516bf6a9a6570207864e75fe88d9ea1f7a3 Mon Sep 17 00:00:00 2001
+From: Sammy Pfeiffer <Sammy.Pfeiffer@student.uts.edu.au>
+Date: Mon, 7 May 2018 16:24:30 +1000
+Subject: [PATCH] Fix error: 'cout' is not a member of 'std'
+
+---
+ qi/application.hpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/qi/application.hpp b/qi/application.hpp
+index cd6b4dc..003c9af 100644
+--- a/qi/application.hpp
++++ b/qi/application.hpp
+@@ -12,6 +12,7 @@
+ # include <vector>
+ # include <string>
+ # include <qi/api.hpp>
++# include <iostream>
+ 
+ namespace qi {
+ 
+-- 
+2.7.4
+

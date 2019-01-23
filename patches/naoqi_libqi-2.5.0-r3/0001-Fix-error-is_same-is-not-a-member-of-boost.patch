@@ -1,0 +1,24 @@
+From 6869b9537b3f1f84633abfe6ef0b24d1ba5205b4 Mon Sep 17 00:00:00 2001
+From: Sammy Pfeiffer <Sammy.Pfeiffer@student.uts.edu.au>
+Date: Mon, 7 May 2018 17:06:21 +1000
+Subject: [PATCH] Fix error: 'is_same' is not a member of 'boost'
+
+---
+ qi/detail/executioncontext.hpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/qi/detail/executioncontext.hpp b/qi/detail/executioncontext.hpp
+index fa9a5f2..ef98473 100644
+--- a/qi/detail/executioncontext.hpp
++++ b/qi/detail/executioncontext.hpp
+@@ -10,6 +10,7 @@
+ #include <boost/function.hpp>
+ #include <qi/clock.hpp>
+ #include <qi/api.hpp>
++#include <boost/type_traits.hpp>
+ 
+ namespace qi
+ {
+-- 
+2.7.4
+
