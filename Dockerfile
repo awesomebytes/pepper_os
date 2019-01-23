@@ -103,7 +103,7 @@ RUN echo ">=media-plugins/alsa-plugins-1.1.6 pulseaudio" >> /tmp/gentoo/etc/port
 RUN emerge media-sound/pulseaudio
 
 # To avoid https://bugs.gentoo.org/676022
-RUN echo ">=icedtea-bin-3.10.0" >> /tmp/gentoo/etc/portage/package.mask
+RUN echo ">=dev-java/icedtea-bin-3.10.0" >> /tmp/gentoo/etc/portage/package.mask
 
 RUN emerge ros-kinetic/pepper_meshes
 
