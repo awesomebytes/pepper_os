@@ -223,55 +223,16 @@ if sys.executable.startswith('/usr/bin/python'):\n\
 # Adding to the line 'RETAIN="HOME=$HOME TERM=$TERM USER=$USER SHELL=$SHELL"'
 RUN sed 's/SHELL=$SHELL/SHELL=$SHELL XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR/g' /tmp/gentoo/startprefix_original
 
-RUN echo -e '# Check if the link exists in /tmp/gentoo\n\
-# If it doesn\'t exist, create it\n\
-if [ ! -L /tmp/gentoo ]; then\n\
-  echo "Softlink to this Gentoo Prefix in /tmp/gentoo does not exist, creating it..."\n\
-  cd /tmp\n\
-  ln -s /home/nao/gentoo gentoo\n\
-fi\n\
-\n\
-\n\
-export PATH=~/.local/bin:$PATH\n\
-export PYTHONPATH=/home/nao/.local/pynaoqi-python2.7-2.5.5.5-linux32/lib/python2.7/site-packages\n\
-# Source ROS Kinetic on Gentoo Prefix\n\
-source /tmp/gentoo/opt/ros/kinetic/setup.bash\n\
-export CATKIN_PREFIX_PATH=/tmp/gentoo/opt/ros/kinetic\n\
-export ROS_LANG_DISABLE=genlisp:geneus\n\
-# Given this is only for user shells, we may be alright using just localhost\n\
-# export ROS_IP=$(ifconfig wlan0 | grep "inet " | awk \'{print $2}\')\n\
-export ROS_IP=127.0.0.1\n\
-\n\
-# If not running interactively, don\'t do anything\n\
-case $- in\n\
-    *i*) ;;\n\
-      *) return;;\n\
-esac\n\
-\n\
-# Otherwise, check if we are in prefixed environment, if not, go in it\n\
-if grep -q '/tmp/gentoo/bin/bash' /proc/$$/cmdline ; then\n\
-    :\n\
-else\n\
-    EPREFIX=/tmp/gentoo\n\
-    SHELL=/tmp/gentoo/bin/bash\n\
-    echo "Entering ROS Pepperfix ${EPREFIX}"\n\
-    # start the login shell, clean the entire environment but what\'s needed\n\
-    RETAIN="HOME=$HOME TERM=$TERM USER=$USER SHELL=$SHELL XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR"\n\
-    # PROFILEREAD is necessary on SUSE not to wipe the env on shell start\n\
-    [[ -n ${PROFILEREAD} ]] && RETAIN+=" PROFILEREAD=$PROFILEREAD"\n\
-    # ssh-agent is handy to keep, of if set, inherit it\n\
-    [[ -n ${SSH_AUTH_SOCK} ]] && RETAIN+=" SSH_AUTH_SOCK=$SSH_AUTH_SOCK"\n\
-    # if we\'re on some X terminal, makes sense to inherit that too\n\
-    [[ -n ${DISPLAY} ]] && RETAIN+=" DISPLAY=$DISPLAY"\n\
-    # do it!\n\
-    env -i $RETAIN $SHELL -l\n\
-    # Note that the new shell will source .bashrc too\n\
-fi\n\
-' >> .bash_profile
+# Takes care of initializing the shell correctly
+COPY --chown=nao:nao config/.bash_profile /home/nao/.bash_profile
 
-# For the booting for the robot we will need to redo
-# ~/naoqi/preferences/autoload.ini
+# Takes care of booting roscore on boot
+COPY --chown=nao:nao roscore_boot_manager.py /home/nao/.local/bin
+COPY --chown=nao:nao run_roscore.sh /home/nao/.local/bin
 
-# also https://github.com/uts-magic-lab/command_executer
+# Run roscore on boot, executed by the robot on boot
+RUN echo "/home/nao/.local/bin/roscore_boot_manager.py" >> /home/nao/naoqi/preferences/autoload.ini
+
+# TODO: https://github.com/uts-magic-lab/command_executer
 
 ENTRYPOINT ["/tmp/gentoo/startprefix"]
