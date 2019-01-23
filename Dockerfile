@@ -199,12 +199,15 @@ RUN emerge ros-kinetic/gscam
 
 # Install in our locally known path pynaoqi (to avoid sourcing /opt/aldebaran/lib/python2.7...)
 RUN wget https://github.com/awesomebytes/pepper_os/releases/download/pynaoqi-python2.7-2.5.5.5-linux32/pynaoqi-python2.7-2.5.5.5-linux32.tar.gz &&\
-    tar xvf pynaoqi-python2.7-2.5.5.5-linux32.tar.gz &&\
-    rm pynaoqi-python2.7-2.5.5.5-linux32.tar.gz
+    mkdir -p /home/nao/.local &&\
+    cd /home/nao/.local &&\
+    tar xvf /home/nao/pynaoqi-python2.7-2.5.5.5-linux32.tar.gz &&\
+    rm /home/nao/pynaoqi-python2.7-2.5.5.5-linux32.tar.gz
 RUN ls
 
 RUN pip install --user dill
 RUN pip install --user cloudpickle
+RUN pip install --user uptime
 
 # Fix all python shebangs
 RUN cd ~/.local/bin &&\
@@ -230,7 +233,7 @@ fi\n\
 \n\
 \n\
 export PATH=~/.local/bin:$PATH\n\
-export PYTHONPATH=/home/nao/pynaoqi-python2.7-2.5.5.5-linux32/lib/python2.7/site-packages\n\
+export PYTHONPATH=/home/nao/.local/pynaoqi-python2.7-2.5.5.5-linux32/lib/python2.7/site-packages\n\
 # Source ROS Kinetic on Gentoo Prefix\n\
 source /tmp/gentoo/opt/ros/kinetic/setup.bash\n\
 export CATKIN_PREFIX_PATH=/tmp/gentoo/opt/ros/kinetic\n\
