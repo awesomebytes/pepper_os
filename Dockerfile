@@ -251,8 +251,8 @@ RUN sed 's/SHELL=$SHELL/SHELL=$SHELL XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR/g' /tmp/ge
 COPY --chown=nao:nao config/.bash_profile /home/nao/.bash_profile
 
 # Takes care of booting roscore on boot
-COPY --chown=nao:nao roscore_boot_manager.py /home/nao/.local/bin
-COPY --chown=nao:nao run_roscore.sh /home/nao/.local/bin
+COPY --chown=nao:nao scripts/roscore_boot_manager.py /home/nao/.local/bin
+COPY --chown=nao:nao scripts/run_roscore.sh /home/nao/.local/bin
 
 # Run roscore on boot, executed by the robot on boot
 RUN echo "/home/nao/.local/bin/roscore_boot_manager.py" >> /home/nao/naoqi/preferences/autoload.ini
