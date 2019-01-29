@@ -178,6 +178,10 @@ RUN cd /tmp/gentoo/etc/portage/patches/ros-kinetic &&\
     wget https://gist.githubusercontent.com/awesomebytes/0e84ce3539cdbe6d8013a75f17de34a1/raw/c72c8d4f7d307e553629f18dab1c11d184e5295d/0001-Adapt-for-Gentoo-Prefix-on-tmp-gentoo.patch
 RUN emerge ros-kinetic/teb_local_planner
 RUN emerge ros-kinetic/dwa_local_planner
+# Workaround
+RUN cd /tmp/gentoo/usr/local/portage/ros-kinetic/sbpl_lattice_planner &&\
+    rm Manifest && \
+    ebuild sbpl*.ebuild manifest
 RUN emerge ros-kinetic/sbpl_lattice_planner
 
 RUN EXTRA_ECONF="--enable-pulse" emerge media-libs/gst-plugins-good
@@ -204,6 +208,26 @@ RUN wget https://github.com/awesomebytes/pepper_os/releases/download/pynaoqi-pyt
     tar xvf /home/nao/pynaoqi-python2.7-2.5.5.5-linux32.tar.gz &&\
     rm /home/nao/pynaoqi-python2.7-2.5.5.5-linux32.tar.gz
 RUN ls
+
+RUN cd /tmp && git clone https://github.com/awesomebytes/pepper_os &&\
+    cp -r pepper_os/patches/* /tmp/gentoo/etc/portage/patches/ros-kinetic &&\
+    rm -r pepper_os
+
+RUN cd /tmp/gentoo/usr/local/portage/ros-kinetic/naoqi_libqicore &&\
+    rm Manifest && \
+    ebuild naoqi*.ebuild manifest
+
+RUN emerge ros-kinetic/naoqi_libqi ros-kinetic/naoqi_libqicore
+
+RUN emerge dev-libs/libusb
+
+# Make ros_ws with
+# naoqi_driver
+# openni2_camera
+# openni2_launch
+# pal_msgs
+# pepper_openni
+
 
 RUN pip install --user dill
 RUN pip install --user cloudpickle
