@@ -11,7 +11,11 @@ export PYTHONPATH=/home/nao/.local/pynaoqi-python2.7-2.5.5.5-linux32/lib/python2
 source /tmp/gentoo/opt/ros/kinetic/setup.bash
 export CATKIN_PREFIX_PATH=/tmp/gentoo/opt/ros/kinetic
 export ROS_LANG_DISABLE=genlisp:geneus
-export ROS_MASTER_URI=`python -c "import rosgraph; print(rosgraph.Master('ip_checker').getUri())"`
+if [[ $(ps aux | grep roscore | grep -v grep) ]]; then
+    export ROS_MASTER_URI=`python -c "import rosgraph; print(rosgraph.Master('ip_checker').getUri())"`
+else
+    export ROS_MASTER_URI=http://localhost:11311
+fi
 
 case $- in
     *i*) ;;
