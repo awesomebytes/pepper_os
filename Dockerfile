@@ -221,17 +221,11 @@ RUN emerge ros-kinetic/naoqi_libqi ros-kinetic/naoqi_libqicore
 
 RUN emerge dev-libs/libusb
 
-# Make ros_ws with
-# naoqi_driver
-# openni2_camera
-# openni2_launch
-# pal_msgs
-# pepper_openni
-
-
 RUN pip install --user dill
 RUN pip install --user cloudpickle
 RUN pip install --user uptime
+
+RUN emerge ros-kinetic/humanoid_nav_msgs
 
 # Fix all python shebangs
 RUN cd ~/.local/bin &&\
