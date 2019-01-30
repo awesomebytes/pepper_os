@@ -226,6 +226,7 @@ RUN pip install --user cloudpickle
 RUN pip install --user uptime
 
 RUN emerge ros-kinetic/humanoid_nav_msgs
+RUN emerge ros-kinetic/rgbd_launch
 
 # Fix all python shebangs
 RUN cd ~/.local/bin &&\
