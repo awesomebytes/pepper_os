@@ -252,6 +252,9 @@ COPY --chown=nao:nao scripts/run_roscore.sh /home/nao/.local/bin
 # Run roscore on boot, executed by the robot on boot
 RUN echo "/home/nao/.local/bin/roscore_boot_manager.py" >> /home/nao/naoqi/preferences/autoload.ini
 
+# Fix new path on pynaoqi
+RUN sed -i 's@/home/nao/pynaoqi-python2.7-2.5.5.5-linux32/lib/libqipython.so@/home/nao/.local/pynaoqi-python2.7-2.5.5.5-linux32/lib/libqipython.so@g' /home/nao/.local/pynaoqi-python2.7-2.5.5.5-linux32/lib/python2.7/site-packages/qi/__init__.py
+
 # TODO: https://github.com/uts-magic-lab/command_executer
 
 ENTRYPOINT ["/tmp/gentoo/startprefix"]
