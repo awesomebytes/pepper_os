@@ -8,7 +8,7 @@ RUN last_desktop_url=`curl -s -L https://github.com/awesomebytes/ros_overlay_on_
 curl -s -L $last_desktop_url | grep download/release | cut -d '"' -f2 | xargs -n 1 printf "https://github.com%s\n" | xargs -n 1 curl -O -L -s &&\
     cat gentoo_on_tmp* > gentoo_on_tmp.tar.gz &&\
     rm gentoo_on_tmp*.part* &&\
-    tar xvf gentoo_on_tmp.tar.gz &&\
+    tar xf gentoo_on_tmp.tar.gz &&\
     rm gentoo_on_tmp.tar.gz
 
 # Fix permissions of tmp
@@ -47,8 +47,6 @@ RUN emaint sync -a
 RUN emerge dev-python/pip
 RUN pip install --user argparse
 
-RUN echo ">=media-plugins/alsa-plugins-1.1.7 pulseaudio" >> $EPREFIX/etc/portage/package.use
-
 RUN echo "# required by ros-kinetic/pcl_conversions-0.2.1::ros-overlay for navigation" >> $EPREFIX/etc/portage/package.accept_keywords &&\
     echo "=sci-libs/pcl-9999 **" >> $EPREFIX/etc/portage/package.accept_keywords
 
@@ -58,15 +56,14 @@ RUN cd /tmp/gentoo/opt &&\
     find ./ -type f -name *.pc -exec sed -i -e 's@/home/user/gentoo@/tmp/gentoo@g' {} \; &&\
     find ./ -type f -name *.cmake -exec sed -i -e 's@/home/user/gentoo@/tmp/gentoo@g' {} \;
 
-# TODO: Need to fix https://bugs.gentoo.org/673464
 
 # Navigation needs it becuase of ros-kinetic/move_slow_and_clear
 # Giving error: 
-RUN mkdir -p /tmp/gentoo/etc/portage/patches/sci-libs/pcl-1.8.1 && \
-    cd /tmp/gentoo/etc/portage/patches/sci-libs/pcl-1.8.1 && \
-    wget https://664126.bugs.gentoo.org/attachment.cgi?id=545428 -O gcc8.patch
-RUN echo ">=sci-libs/pcl-1.9.1" >> /tmp/gentoo/etc/portage/package.mask
-RUN echo "=sci-libs/pcl-1.8.1 **" >> /tmp/gentoo/etc/portage/package.accept_keywords
+# RUN mkdir -p /tmp/gentoo/etc/portage/patches/sci-libs/pcl-1.8.1 && \
+#     cd /tmp/gentoo/etc/portage/patches/sci-libs/pcl-1.8.1 && \
+#     wget https://664126.bugs.gentoo.org/attachment.cgi?id=545428 -O gcc8.patch
+RUN echo ">=sci-libs/pcl-1.10.0" >> /tmp/gentoo/etc/portage/package.mask
+RUN echo "=sci-libs/pcl-1.9.1 **" >> /tmp/gentoo/etc/portage/package.accept_keywords
 RUN emerge sci-libs/pcl
 
 RUN emerge ros-kinetic/robot_state_publisher \
@@ -95,13 +92,7 @@ RUN emerge media-libs/portaudio \
 
 RUN emerge media-libs/opus
 
-# To avoid: https://bugs.gentoo.org/673464
-RUN echo ">=media-plugins/alsa-plugins-1.1.7-r1" >> /tmp/gentoo/etc/portage/package.mask
-RUN echo ">=media-plugins/alsa-plugins-1.1.6 pulseaudio" >> /tmp/gentoo/etc/portage/package.use
 RUN emerge media-sound/pulseaudio
-
-# To avoid https://bugs.gentoo.org/676022
-RUN echo ">=dev-java/icedtea-bin-3.10.0" >> /tmp/gentoo/etc/portage/package.mask
 
 RUN emerge ros-kinetic/pepper_meshes
 
@@ -114,7 +105,13 @@ RUN emerge ros-kinetic/move_base_flex
 # #     ros-kinetic/web_video_server \
 # # CODEC_FLAG_GLOBAL_HEADER -> AV_CODEC_FLAG_GLOBAL_HEADER
 
-RUN pip install --user dlib
+# RUN pip install --user dlib
+# As Pepper CPU has no AVX instructions
+RUN git clone https://github.com/davisking/dlib &&\
+    cd dlib &&\
+    pip uninstall dlib -y &&\
+    python setup.py install --user --no USE_AVX_INSTRUCTIONS
+
 RUN pip install --user pysqlite
 RUN pip install --user ipython
 RUN pip install --user --upgrade numpy
