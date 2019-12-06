@@ -5,7 +5,7 @@ WORKDIR /home/nao
 
 # Download and extract the latest Gentoo Prefix + ROS desktop image
 RUN last_desktop_url=`curl -s -L https://github.com/awesomebytes/ros_overlay_on_gentoo_prefix_32b/releases | grep -m 1 "ROS desktop" | cut -d '"' -f2 | xargs -n 1 printf "http://github.com%s\n"`; \
-curl -s -L $last_desktop_url | grep download/release | cut -d '"' -f2 | xargs -n 1 printf "https://github.com%s\n" | xargs -n 1 aria2c -x 10 &&\
+curl -s -L $last_desktop_url | grep download/release | cut -d '"' -f2 | xargs -n 1 printf "https://github.com%s\n" | xargs -n 1 wget &&\
     cat gentoo_on_tmp* > gentoo_on_tmp.tar.gz &&\
     rm gentoo_on_tmp*.part* &&\
     tar xvf gentoo_on_tmp.tar.gz &&\
