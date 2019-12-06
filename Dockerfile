@@ -3,11 +3,9 @@ FROM awesomebytes/pepper_2.5.5.5
 USER nao
 WORKDIR /home/nao
 
-# Download and extract the Gentoo Prefix + ROS desktop image
-RUN wget http://github.com/awesomebytes/ros_overlay_on_gentoo_prefix_32b/releases/download/release%2F2019-01-11T02at56plus00at00/gentoo_on_tmp_with_ros-kinetic_desktop-x86_2019-01-11T02at56plus00at00.tar.gz.part-00 &\
-    wget http://github.com/awesomebytes/ros_overlay_on_gentoo_prefix_32b/releases/download/release%2F2019-01-11T02at56plus00at00/gentoo_on_tmp_with_ros-kinetic_desktop-x86_2019-01-11T02at56plus00at00.tar.gz.part-01 &\
-    wget http://github.com/awesomebytes/ros_overlay_on_gentoo_prefix_32b/releases/download/release%2F2019-01-11T02at56plus00at00/gentoo_on_tmp_with_ros-kinetic_desktop-x86_2019-01-11T02at56plus00at00.tar.gz.part-02 &\
-    wait &&\
+# Download and extract the latest Gentoo Prefix + ROS desktop image
+RUN last_desktop_url=`curl -s -L https://github.com/awesomebytes/ros_overlay_on_gentoo_prefix_32b/releases | grep -m 1 "ROS desktop" | cut -d '"' -f2 | xargs -n 1 printf "http://github.com%s\n"`; \
+curl -s -L $last_desktop_url | grep download/release | cut -d '"' -f2 | xargs -n 1 printf "https://github.com%s\n" | xargs -n 1 aria2c -x 10 &&\
     cat gentoo_on_tmp* > gentoo_on_tmp.tar.gz &&\
     rm gentoo_on_tmp*.part* &&\
     tar xvf gentoo_on_tmp.tar.gz &&\
