@@ -102,6 +102,7 @@ RUN echo "# required by media-sound/pulseaudio-13.0::gentoo[alsa-plugin,alsa]\
 #  (sys-libs/libcap-2.27:0/0::gentoo, ebuild scheduled for merge) (buildtime)
 #   (sys-libs/pam-1.3.1-r1:0/0::gentoo, ebuild scheduled for merge) (buildtime)
 RUN echo ">=sys-libs/libcap-2.27 -pam" >> $EPREFIX/etc/portage/package.use
+RUN echo "media-sound/pulseaudio -udev" >> $EPREFIX/etc/portage/package.use
 RUN emerge media-sound/pulseaudio
 
 RUN emerge ros-kinetic/pepper_meshes
