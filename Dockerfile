@@ -93,8 +93,8 @@ RUN emerge media-libs/portaudio \
 RUN emerge media-libs/opus
 
 # emerging pulseaudio asks for this
-RUN echo "# required by media-sound/pulseaudio-13.0::gentoo[alsa-plugin,alsa]\
-# required by media-sound/pulseaudio (argument)\
+RUN echo "# required by media-sound/pulseaudio-13.0::gentoo[alsa-plugin,alsa]\n\
+# required by media-sound/pulseaudio (argument)\n\
 >=media-plugins/alsa-plugins-1.2.1 pulseaudio" >> $EPREFIX/etc/portage/package.use
 # To avoid:
 #  * Error: circular dependencies:
@@ -105,8 +105,21 @@ RUN echo ">=sys-libs/libcap-2.27 -pam" >> $EPREFIX/etc/portage/package.use
 RUN echo "media-sound/pulseaudio -udev" >> $EPREFIX/etc/portage/package.use
 RUN emerge media-sound/pulseaudio
 
-RUN emerge ros-kinetic/pepper_meshes
 
+RUN echo "# required by ros-kinetic/move_base_flex-0.2.5-r1::ros-overlay\n\
+# required by ros-kinetic/move_base_flex (argument)\n\
+>=ros-kinetic/mbf_simple_nav-0.2.5-r1 3-Clause\n\
+# required by ros-kinetic/move_base_flex-0.2.5-r1::ros-overlay\n\
+# required by ros-kinetic/move_base_flex (argument)\n\
+>=ros-kinetic/mbf_costmap_nav-0.2.5-r1 3-Clause\n\
+# required by ros-kinetic/mbf_simple_nav-0.2.5-r1::ros-overlay\n\
+# required by ros-kinetic/move_base_flex-0.2.5-r1::ros-overlay\n\
+# required by ros-kinetic/move_base_flex (argument)\n\
+>=ros-kinetic/mbf_msgs-0.2.5-r1 3-Clause\n\
+# required by ros-kinetic/mbf_costmap_nav-0.2.5-r1::ros-overlay\n\
+# required by ros-kinetic/move_base_flex-0.2.5-r1::ros-overlay\n\
+# required by ros-kinetic/move_base_flex (argument)\n\
+>=ros-kinetic/mbf_abstract_nav-0.2.5-r1 3-Clause" >> $EPREFIX/etc/portage/package.license
 RUN emerge ros-kinetic/move_base_flex
 
 # #     ros-kinetic/naoqi_libqicore \
@@ -224,6 +237,8 @@ RUN cd /tmp/gentoo/usr/local/portage/ros-kinetic/naoqi_libqicore &&\
     ebuild naoqi*.ebuild manifest
 
 RUN emerge ros-kinetic/naoqi_libqi ros-kinetic/naoqi_libqicore
+
+RUN emerge ros-kinetic/pepper_meshes
 
 RUN emerge dev-libs/libusb
 
