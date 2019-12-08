@@ -92,6 +92,16 @@ RUN emerge media-libs/portaudio \
 
 RUN emerge media-libs/opus
 
+# emerging pulseaudio asks for this
+RUN echo "# required by media-sound/pulseaudio-13.0::gentoo[alsa-plugin,alsa]\
+# required by media-sound/pulseaudio (argument)\
+>=media-plugins/alsa-plugins-1.2.1 pulseaudio" >> $EPREFIX/etc/portage/package.use
+# To avoid:
+#  * Error: circular dependencies:
+# (sys-libs/pam-1.3.1-r1:0/0::gentoo, ebuild scheduled for merge) depends on
+#  (sys-libs/libcap-2.27:0/0::gentoo, ebuild scheduled for merge) (buildtime)
+#   (sys-libs/pam-1.3.1-r1:0/0::gentoo, ebuild scheduled for merge) (buildtime)
+RUN echo ">=sys-libs/libcap-2.27 -pam" >> $EPREFIX/etc/portage/package.use
 RUN emerge media-sound/pulseaudio
 
 RUN emerge ros-kinetic/pepper_meshes
