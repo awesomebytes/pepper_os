@@ -57,6 +57,10 @@ RUN cd /tmp/gentoo/opt &&\
     find ./ -type f -name *.cmake -exec sed -i -e 's@/home/user/gentoo@/tmp/gentoo@g' {} \;
 
 
+RUN cd /tmp && git clone https://github.com/awesomebytes/pepper_os &&\
+    cp -r pepper_os/patches/* /tmp/gentoo/etc/portage/patches/ros-kinetic &&\
+    rm -r pepper_os
+
 # Navigation needs it becuase of ros-kinetic/move_slow_and_clear
 # Giving error: 
 # RUN mkdir -p /tmp/gentoo/etc/portage/patches/sci-libs/pcl-1.8.1 && \
@@ -76,6 +80,7 @@ RUN emerge ros-kinetic/image_common \
     ros-kinetic/tf2_geometry_msgs \
     ros-kinetic/ros_numpy \
     ros-kinetic/ddynamic_reconfigure_python
+
 
 RUN emerge ros-kinetic/navigation
 RUN emerge ros-kinetic/slam_gmapping
@@ -228,10 +233,6 @@ RUN wget https://github.com/awesomebytes/pepper_os/releases/download/pynaoqi-pyt
     tar xvf /home/nao/pynaoqi-python2.7-2.5.5.5-linux32.tar.gz &&\
     rm /home/nao/pynaoqi-python2.7-2.5.5.5-linux32.tar.gz
 RUN ls
-
-RUN cd /tmp && git clone https://github.com/awesomebytes/pepper_os &&\
-    cp -r pepper_os/patches/* /tmp/gentoo/etc/portage/patches/ros-kinetic &&\
-    rm -r pepper_os
 
 RUN cd /tmp/gentoo/usr/local/portage/ros-kinetic/naoqi_libqicore &&\
     rm Manifest && \
