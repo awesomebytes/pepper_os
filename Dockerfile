@@ -59,7 +59,7 @@ RUN cd /tmp/gentoo/opt &&\
 
 RUN cd /tmp && git clone https://github.com/awesomebytes/pepper_os &&\
     cp -r pepper_os/patches/* /tmp/gentoo/etc/portage/patches/ros-kinetic &&\
-    rm -r pepper_os
+    rm -rf pepper_os
 
 # Navigation needs it becuase of ros-kinetic/move_slow_and_clear
 # Giving error: 
