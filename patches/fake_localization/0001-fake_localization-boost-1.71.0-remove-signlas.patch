@@ -1,0 +1,25 @@
+From 4fbcec90ec2ecc0f4e0f897e7b2707098e7bcf70 Mon Sep 17 00:00:00 2001
+From: Sammy Pfeiffer <sammypfeiffer@gmail.com>
+Date: Tue, 10 Dec 2019 15:44:25 +1100
+Subject: [PATCH 1/1] fake_localization boost 1.71.0 remove signlas
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index dd81ef2..60dc100 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -14,7 +14,7 @@ find_package(catkin REQUIRED
+         )
+ 
+ 
+-find_package(Boost REQUIRED COMPONENTS signals)
++find_package(Boost)
+ 
+ catkin_package(
+     CATKIN_DEPENDS
+-- 
+2.7.4
+
