@@ -240,7 +240,8 @@ RUN cd /tmp/gentoo/usr/local/portage/ros-kinetic/naoqi_libqicore &&\
 
 RUN emerge ros-kinetic/naoqi_libqi ros-kinetic/naoqi_libqicore
 
-RUN emerge ros-kinetic/pepper_meshes
+# TODO: this errors... shouldn't be too bad
+# RUN emerge ros-kinetic/pepper_meshes
 
 RUN emerge dev-libs/libusb
 
