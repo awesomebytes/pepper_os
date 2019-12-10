@@ -1,0 +1,24 @@
+From 40c441625cb7d8c40efe063affb209b37416ba99 Mon Sep 17 00:00:00 2001
+From: Sammy Pfeiffer <Sammy.Pfeiffer@student.uts.edu.au>
+Date: Tue, 10 Dec 2019 05:20:41 +0000
+Subject: [PATCH 1/1] Gmapping Boost 1.71.0 signals patch
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0b1990d..0c5a8e0 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -3,7 +3,7 @@ project(gmapping)
+ 
+ find_package(catkin REQUIRED nav_msgs nodelet openslam_gmapping roscpp tf rosbag_storage)
+ 
+-find_package(Boost REQUIRED signals)
++find_package(Boost)
+ 
+ include_directories(${Boost_INCLUDE_DIRS} ${catkin_INCLUDE_DIRS})
+ 
+-- 
+2.24.0
