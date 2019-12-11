@@ -98,9 +98,7 @@ RUN emerge media-libs/portaudio \
 RUN emerge media-libs/opus
 
 # emerging pulseaudio asks for this
-RUN echo "# required by media-sound/pulseaudio-13.0::gentoo[alsa-plugin,alsa]\n\
-# required by media-sound/pulseaudio (argument)\n\
->=media-plugins/alsa-plugins-1.2.1 pulseaudio" >> $EPREFIX/etc/portage/package.use
+RUN echo ">=media-plugins/alsa-plugins-1.2.1 pulseaudio" >> $EPREFIX/etc/portage/package.use
 # To avoid:
 #  * Error: circular dependencies:
 # (sys-libs/pam-1.3.1-r1:0/0::gentoo, ebuild scheduled for merge) depends on
@@ -238,7 +236,8 @@ RUN cd /tmp/gentoo/usr/local/portage/ros-kinetic/naoqi_libqicore &&\
     rm Manifest && \
     ebuild naoqi*.ebuild manifest
 
-RUN emerge ros-kinetic/naoqi_libqi ros-kinetic/naoqi_libqicore
+# TODO: Fix naoqi_libqi with boost 1.71
+# RUN emerge ros-kinetic/naoqi_libqi ros-kinetic/naoqi_libqicore
 
 # TODO: this errors... shouldn't be too bad
 # RUN emerge ros-kinetic/pepper_meshes
