@@ -111,20 +111,10 @@ RUN echo "media-sound/pulseaudio -udev" >> $EPREFIX/etc/portage/package.use
 RUN emerge media-sound/pulseaudio
 
 
-RUN echo '# required by ros-kinetic/move_base_flex-0.2.5-r1::ros-overlay\
-# required by ros-kinetic/move_base_flex (argument)\
->=ros-kinetic/mbf_simple_nav-0.2.5-r1 3-Clause\
-# required by ros-kinetic/move_base_flex-0.2.5-r1::ros-overlay\
-# required by ros-kinetic/move_base_flex (argument)\
->=ros-kinetic/mbf_costmap_nav-0.2.5-r1 3-Clause\
-# required by ros-kinetic/mbf_simple_nav-0.2.5-r1::ros-overlay\
-# required by ros-kinetic/move_base_flex-0.2.5-r1::ros-overlay\
-# required by ros-kinetic/move_base_flex (argument)\
->=ros-kinetic/mbf_msgs-0.2.5-r1 3-Clause\
-# required by ros-kinetic/mbf_costmap_nav-0.2.5-r1::ros-overlay\
-# required by ros-kinetic/move_base_flex-0.2.5-r1::ros-overlay\
-# required by ros-kinetic/move_base_flex (argument)\
->=ros-kinetic/mbf_abstract_nav-0.2.5-r1 3-Clause' >> $EPREFIX/etc/portage/package.license
+RUN echo ">=ros-kinetic/mbf_simple_nav-0.2.5-r1 3-Clause" >> $EPREFIX/etc/portage/package.license
+RUN echo ">=ros-kinetic/mbf_costmap_nav-0.2.5-r1 3-Clause" >> $EPREFIX/etc/portage/package.license
+RUN echo ">=ros-kinetic/mbf_msgs-0.2.5-r1 3-Clause" >> $EPREFIX/etc/portage/package.license
+RUN echo ">=ros-kinetic/mbf_abstract_nav-0.2.5-r1 3-Clause" >> $EPREFIX/etc/portage/package.license
 RUN emerge ros-kinetic/move_base_flex
 
 # #     ros-kinetic/naoqi_libqicore \
