@@ -199,6 +199,10 @@ RUN cd /tmp/gentoo/usr/local/portage/ros-kinetic/sbpl_lattice_planner &&\
     ebuild sbpl*.ebuild manifest
 RUN emerge ros-kinetic/sbpl_lattice_planner
 
+# Meanwhile https://bugs.gentoo.org/705974 gets fixed upstream (make has a backward incompatible change)
+RUN mkdir -p $EPREFIX/etc/portage/patches/media-libs/gst-plugins-bad-1.14.5 &&\
+    wget https://705974.bugs.gentoo.org/attachment.cgi?id=604218 -O $EPREFIX/etc/portage/patches/media-libs/gst-plugins-bad-1.14.5/make-fix.patch
+
 RUN EXTRA_ECONF="--enable-pulse" emerge media-libs/gst-plugins-good
 RUN emerge media-plugins/gst-plugins-opus \
     media-plugins/gst-plugins-v4l2 \
