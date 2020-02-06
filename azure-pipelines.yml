@@ -30,11 +30,11 @@ jobs:
     # Tag as :latest too
     - script: docker tag $(DockerHub_user)/$(docker_image_name):$(Build.BuildId) $(DockerHub_user)/$(docker_image_name):latest
       displayName: 'tag as latest'
-      condition: always()
+      # condition: always()
     # Push as latest
     - script: docker push $(DockerHub_user)/$(docker_image_name):latest
       displayName: 'push latest to DockerHub'
-      condition: always()
+      # condition: always()
 
  
   - job: package_stage
@@ -69,11 +69,11 @@ jobs:
     # Tag as :latest too
     - script: docker tag $(DockerHub_user)/$(docker_image_name):$(Build.BuildId) $(DockerHub_user)/$(docker_image_name):latest
       displayName: 'tag as latest'
-      condition: always()
+      # condition: always()
     # Push as latest
     - script: docker push $(DockerHub_user)/$(docker_image_name):latest
       displayName: 'push latest to DockerHub'
-      condition: always()
+      # condition: always()
 
     # Create a temporal container to copy the pepper_os.tar.gz
     - script: |
@@ -134,11 +134,11 @@ jobs:
     # Tag as :latest too
     - script: docker tag $(DockerHub_user)/$(docker_image_name):$(Build.BuildId) $(DockerHub_user)/$(docker_image_name):latest
       displayName: 'tag as latest'
-      condition: always()
+      # condition: always()
     # Push as latest
     - script: docker push $(DockerHub_user)/$(docker_image_name):latest
       displayName: 'push latest to DockerHub'
-      condition: always()
+      # condition: always()
 
  
   - job: package_stage_from_previous
