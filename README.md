@@ -16,6 +16,7 @@ docker run -it -h pepper awesomebytes/pepper_os
 ```
 
 # Buildfarm
+[![Build Status](https://dev.azure.com/ROOGP/ROOGP_CI/_apis/build/status/awesomebytes.pepper_os?branchName=master)](https://dev.azure.com/ROOGP/ROOGP_CI/_build?definitionId=1&_a=summary)
 
 Link: https://dev.azure.com/ROOGP/ROOGP_CI/_build
 
