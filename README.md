@@ -12,7 +12,7 @@ Pre-compiled software includes:
 
 # How to deploy on your robot
 
-Go to the [releases](https://github.com/awesomebytes/pepper_os/releases) section and download the latest release of the OS titled "Pepper OS based on Gentoo Prefix and ROS" (you can also use the ones tagged as _not full rebuild_ in case there hasn't been a successful built of the full rebuilt for a while for some reason). It is divided in parts of <1GB, total ~5GB. For example:
+Go to the [releases](https://github.com/awesomebytes/pepper_os/releases) section and download the latest release of the OS titled "Pepper OS based on Gentoo Prefix and ROS" (you can also use the ones tagged as _not full rebuild_ in case there hasn't been a successful built of the full rebuild for a while for some reason). It is divided in parts of <1GB, total ~5GB. For example:
 
 ```bash
 aria2c -x 10 https://github.com/awesomebytes/pepper_os/releases/download/release%2F2020-02-05T19at34plus00at00/pepper_os_ros-kinetic-x86_2020-02-05T19at34plus00at00.tar.gz.part-00 &
