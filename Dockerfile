@@ -134,9 +134,9 @@ RUN git clone https://github.com/davisking/dlib &&\
 RUN pip install --user pysqlite
 RUN pip install --user ipython
 RUN pip install --user --upgrade numpy
-RUN pip install --user scipy
-RUN pip install --user pytz
-RUN pip install --user wstool
+RUN pip install --user scipy pytz wstool
+# RUN pip install --user pytz
+# RUN pip install --user wstool
 
 RUN pip install --user Theano
 RUN pip install --user keras
@@ -162,7 +162,6 @@ RUN pip install --user SpeechRecognition
 RUN pip install --user nltk
 RUN pip install --user pydub
 
-RUN pip install --user ipython
 RUN pip install --user jupyter
 
 RUN pip install --user https://github.com/awesomebytes/pepper_os/releases/download/upload_tensorflow-1.6.0/tensorflow-1.6.0-cp27-cp27mu-linux_i686.whl
@@ -231,11 +230,10 @@ RUN wget https://github.com/awesomebytes/pepper_os/releases/download/pynaoqi-pyt
     cd /home/nao/.local &&\
     tar xvf /home/nao/pynaoqi-python2.7-2.5.5.5-linux32.tar.gz &&\
     rm /home/nao/pynaoqi-python2.7-2.5.5.5-linux32.tar.gz
-RUN ls
 
-RUN cd /tmp/gentoo/usr/local/portage/ros-kinetic/naoqi_libqicore &&\
-    rm Manifest && \
-    ebuild naoqi*.ebuild manifest
+# RUN cd /tmp/gentoo/usr/local/portage/ros-kinetic/naoqi_libqicore &&\
+#     rm Manifest && \
+#     ebuild naoqi*.ebuild manifest
 
 # TODO: Fix naoqi_libqi with boost 1.71
 # RUN emerge ros-kinetic/naoqi_libqi ros-kinetic/naoqi_libqicore
@@ -245,8 +243,7 @@ RUN cd /tmp/gentoo/usr/local/portage/ros-kinetic/naoqi_libqicore &&\
 
 RUN emerge dev-libs/libusb
 
-RUN pip install --user dill
-RUN pip install --user cloudpickle
+RUN pip install --user dill cloudpickle
 RUN pip install --user uptime
 
 RUN emerge ros-kinetic/humanoid_nav_msgs
