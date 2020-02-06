@@ -2,8 +2,9 @@
 
 [![Build Status](https://dev.azure.com/ROOGP/ROOGP_CI/_apis/build/status/awesomebytes.pepper_os?branchName=master)](https://dev.azure.com/ROOGP/ROOGP_CI/_build?definitionId=1&_a=summary)
 
-Building over Gentoo Prefix, over that ros-overlay, plus anything extra
-needed to make Pepper robots able to do more with the latest available software.
+Building over [Gentoo Prefix](https://github.com/awesomebytes/gentoo_prefix_ci_32b), over that [ros-overlay](https://github.com/awesomebytes/ros_overlay_on_gentoo_prefix_32b/), plus anything extra
+needed to make Pepper robots able to do more with the latest available software. The base image is the
+raw Pepper hard disk image.
 
 Pre-compiled software includes:
 * ROS Kinetic (ROS desktop + navigation stack + many others) ([274 packages list](ROS_package_list.md))
