@@ -41,7 +41,10 @@ RUN sed -i 's/EMERGE_DEFAULT_OPTS=.*//' $EPREFIX/etc/portage/make.conf &&\
 # Force CHOST to build everything or 32b
 RUN echo "CHOST=i686-pc-linux-gnu" >> $EPREFIX/etc/portage/make.conf
 
-# update first
+# Update our source repos first
+# Because we may have previous patches that won't allow to do a sync...
+RUN cd $EPREFIX/usr/local/portage && git reset --hard
+# Now we can update
 RUN emaint sync -a
 # Prepare python
 RUN emerge dev-python/pip
