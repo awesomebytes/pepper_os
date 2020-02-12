@@ -1,5 +1,7 @@
 from awesomebytes/pepper_os_image
 
-RUN tar cvzf /tmp/pepper_os.tar.gz gentoo .local .bash_profile .keras naoqi
+RUN df -h
+RUN tar czf /tmp/pepper_os.tar.gz gentoo .local .bash_profile .keras naoqi
+RUN df -h
 
 ENTRYPOINT ["/tmp/gentoo/startprefix"]

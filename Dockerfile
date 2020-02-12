@@ -3,6 +3,8 @@ FROM awesomebytes/pepper_2.5.5.5
 USER nao
 WORKDIR /home/nao
 
+RUN cat /proc/cpuinfo; cat /proc/meminfo; df -h
+
 # Download and extract the latest Gentoo Prefix + ROS desktop image
 RUN last_desktop_url=`curl -s -L https://github.com/awesomebytes/ros_overlay_on_gentoo_prefix_32b/releases | grep -m 1 "ROS desktop" | cut -d '"' -f2 | xargs -n 1 printf "http://github.com%s\n"`; \
 curl -s -L $last_desktop_url | grep download/release | cut -d '"' -f2 | xargs -n 1 printf "https://github.com%s\n" | xargs -n 1 curl -O -L -s &&\
@@ -279,6 +281,7 @@ RUN echo "/home/nao/.local/bin/roscore_boot_manager.py" >> /home/nao/naoqi/prefe
 # Fix new path on pynaoqi
 RUN sed -i 's@/home/nao/pynaoqi-python2.7-2.5.5.5-linux32/lib/libqipython.so@/home/nao/.local/pynaoqi-python2.7-2.5.5.5-linux32/lib/libqipython.so@g' /home/nao/.local/pynaoqi-python2.7-2.5.5.5-linux32/lib/python2.7/site-packages/qi/__init__.py
 
+RUN df -h
 # TODO: https://github.com/uts-magic-lab/command_executer
 
 ENTRYPOINT ["/tmp/gentoo/startprefix"]
