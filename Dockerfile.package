@@ -1,7 +1,8 @@
 from awesomebytes/pepper_os_image
 
 RUN df -h
-RUN tar czf /tmp/pepper_os.tar.gz gentoo .local .bash_profile .keras naoqi
+# If we don't do --remove-files we don't have enough disk space
+RUN tar czf /tmp/pepper_os.tar.gz gentoo .local .bash_profile .keras naoqi --remove-files
 RUN df -h
 
 ENTRYPOINT ["/tmp/gentoo/startprefix"]
