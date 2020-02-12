@@ -9,6 +9,8 @@ jobs:
       docker_image_name: pepper_os_image
 
     steps:
+    - script: df -h; du -sh ~; du -sh /tmp; du -sh /var/lib/docker
+      displayName: 'Check disk'
     - script: docker login -u $(DockerHub_user) -p $(DockerHub_password)
       displayName: 'docker login'
     # We divide the boostrap in 3 parts to not go over the 6h limit as gcc takes ages
