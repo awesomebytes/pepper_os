@@ -3,7 +3,7 @@ from awesomebytes/pepper_os_image
 RUN df -h
 
 # cleanup space first
-RUN rm -rf $EPREFIX/var/cache/binpkgs/* $EPREFIX/var/tmp/*
+RUN rm -rf $EPREFIX/var/cache/binpkgs/* $EPREFIX/var/tmp/* /home/nao/.cache/*
 RUN emerge app-portage/gentoolkit
 RUN eclean -d distfiles
 RUN df -h
@@ -11,6 +11,7 @@ RUN df -h
 # I was getting: tar: gentoo/opt/ros/kinetic/lib/pkgconfig: file changed as we read it and tar returned 1
 # so forcing true, as the .tar.gz is actually correctly created
 RUN cd /home/nao; tar czf /tmp/pepper_os.tar.gz gentoo .local .bash_profile .keras naoqi --remove-files || true
+SHELL ["/bin/bash"]
 RUN df -h
 
 ENTRYPOINT ["/tmp/gentoo/startprefix"]
