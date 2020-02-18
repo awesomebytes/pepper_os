@@ -63,6 +63,7 @@ RUN cd /tmp/gentoo/opt &&\
 
 
 RUN cd /tmp && git clone https://github.com/awesomebytes/pepper_os &&\
+    mkdir -p /tmp/gentoo/etc/portage/patches/ros-kinetic &&\
     cp -r pepper_os/patches/* /tmp/gentoo/etc/portage/patches/ros-kinetic &&\
     rm -rf pepper_os
 
