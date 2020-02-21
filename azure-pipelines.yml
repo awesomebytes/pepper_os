@@ -95,6 +95,7 @@ jobs:
         export BODY="Extract with: cat ${RELEASE_FILE_NAME}.part-* > ${RELEASE_FILE_NAME}; tar xvf pepper_os*.tar.gz; ./gentoo/startprefix"
         mv $HOME/pepper_os.tar.gz ${RELEASE_FILE_NAME}
         split -b 1024MB -d ${RELEASE_FILE_NAME} ${RELEASE_FILE_NAME}.part-
+        rm ${RELEASE_FILE_NAME}
         export PATH=$HOME/.local/bin:$PATH
         export PYTHONPATH=$HOME/.local/lib/python2.7/site-packages:$PYTHONPATH
         githubrelease --github-token $(GitHub_Token) release $(Build.Repository.Name) create "${RELEASE_TAG}" --publish --name "${RELEASE_NAME}" --body "${BODY}" "${RELEASE_FILE_NAME}.part-*"
@@ -140,7 +141,6 @@ jobs:
   #     displayName: 'push latest to DockerHub'
   #     # condition: always()
 
- 
   # - job: package_stage_from_previous
   #   timeoutInMinutes: 0
   #   dependsOn: "build_pepper_os_from_previous_state_1"
@@ -199,6 +199,7 @@ jobs:
   #       export BODY="Extract with: cat ${RELEASE_FILE_NAME}.part-* > ${RELEASE_FILE_NAME}; tar xvf pepper_os*.tar.gz; ./gentoo/startprefix"
   #       mv $HOME/pepper_os.tar.gz ${RELEASE_FILE_NAME}
   #       split -b 1024MB -d ${RELEASE_FILE_NAME} ${RELEASE_FILE_NAME}.part-
+  #       rm ${RELEASE_FILE_NAME}
   #       export PATH=$HOME/.local/bin:$PATH
   #       export PYTHONPATH=$HOME/.local/lib/python2.7/site-packages:$PYTHONPATH
   #       githubrelease --github-token $(GitHub_Token) release $(Build.Repository.Name) create "${RELEASE_TAG}" --publish --name "${RELEASE_NAME}" --body "${BODY}" "${RELEASE_FILE_NAME}.part-*"

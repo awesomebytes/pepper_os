@@ -1,5 +1,13 @@
 from awesomebytes/pepper_os_image_from_previous
 
-RUN tar cvzf /tmp/pepper_os.tar.gz gentoo .local .bash_profile .keras naoqi
+RUN df -h
+
+# cleanup space first
+RUN rm -rf $EPREFIX/var/cache/binpkgs/* $EPREFIX/var/tmp/* /home/nao/.cache/*
+RUN emerge app-portage/gentoolkit
+RUN eclean -d distfiles
+RUN df -h
+
+RUN tar czf /tmp/pepper_os.tar.gz gentoo .local .bash_profile .keras naoqi --remove-files || true
 
 ENTRYPOINT ["/tmp/gentoo/startprefix"]
