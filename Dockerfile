@@ -91,6 +91,13 @@ RUN emerge ros-melodic/image_common \
     ros-melodic/ros_numpy \
     ros-melodic/ddynamic_reconfigure_python
 
+# Until https://github.com/ros/ros-overlay/pull/964 is merged
+# navigation pulls amcl, and amcl needs the last version to build
+RUN rm $EPREFIX/usr/local/portage/ros-melodic/amcl/* &&\
+    wget https://raw.githubusercontent.com/ros/ros-overlay/b6e46acea5918e68db3b4d2e00bb1a2caa779cb9/ros-melodic/amcl/Manifest -O $EPREFIX/usr/local/portage/ros-melodic/amcl/Manifest &&\
+    wget https://raw.githubusercontent.com/ros/ros-overlay/b6e46acea5918e68db3b4d2e00bb1a2caa779cb9/ros-melodic/amcl/amcl-1.16.4-r1.ebuild -O $EPREFIX/usr/local/portage/ros-melodic/amcl/amcl-1.16.4-r1.ebuild &&\
+    emerge ros-melodic/amcl
+
 
 RUN emerge ros-melodic/navigation
 RUN emerge ros-melodic/slam_gmapping
