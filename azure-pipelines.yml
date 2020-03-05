@@ -47,7 +47,7 @@ jobs:
     variables:
       docker_image_name: pepper_os_image_package_stage
       platform: x86
-      rosdistro: ros-kinetic
+      rosdistro: ros-melodic
 
     steps:
     # The variables are set on the Build options on the web interface
@@ -151,7 +151,7 @@ jobs:
   #   variables:
   #     docker_image_name: pepper_os_image_package_stage_from_previous
   #     platform: x86
-  #     rosdistro: ros-kinetic
+  #     rosdistro: ros-melodic
 
   #   steps:
   #   # The variables are set on the Build options on the web interface

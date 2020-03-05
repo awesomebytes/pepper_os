@@ -7,7 +7,7 @@ needed to make Pepper robots able to do more with the latest available software.
 raw Pepper hard disk image.
 
 Pre-compiled software includes:
-* ROS Kinetic (ROS desktop + navigation stack + many others) ([274 packages list](ROS_package_list.md))
+* ROS Melodic (ROS desktop + navigation stack + many others) ([274 packages list](ROS_package_list.md))
 * Latest Python 2.7.17 with a lot of libraries like dlib, Theano, OpenCV, Tensorflow, numpy ([255 packages list](PIP_package_list.md))
 * All the necessary dependencies that make it possible to build it thanks to Gentoo Prefix (latest GCC, latest CMake, etc) ([767 packages list](GENTOO_package_list.md))
 
@@ -16,11 +16,11 @@ Pre-compiled software includes:
 Go to the [releases](https://github.com/awesomebytes/pepper_os/releases) section and download the latest release of the OS titled "Pepper OS based on Gentoo Prefix and ROS" (you can also use the ones tagged as _not full rebuild_ in case there hasn't been a successful built of the full rebuild for a while for some reason). It is divided in parts of <1GB, total ~5GB. For example:
 
 ```bash
-aria2c -x 10 https://github.com/awesomebytes/pepper_os/releases/download/release%2F2020-02-05T19at34plus00at00/pepper_os_ros-kinetic-x86_2020-02-05T19at34plus00at00.tar.gz.part-00 &
-aria2c -x 10 https://github.com/awesomebytes/pepper_os/releases/download/release%2F2020-02-05T19at34plus00at00/pepper_os_ros-kinetic-x86_2020-02-05T19at34plus00at00.tar.gz.part-01 &
-aria2c -x 10 https://github.com/awesomebytes/pepper_os/releases/download/release%2F2020-02-05T19at34plus00at00/pepper_os_ros-kinetic-x86_2020-02-05T19at34plus00at00.tar.gz.part-02 &
-aria2c -x 10 https://github.com/awesomebytes/pepper_os/releases/download/release%2F2020-02-05T19at34plus00at00/pepper_os_ros-kinetic-x86_2020-02-05T19at34plus00at00.tar.gz.part-03 &
-aria2c -x 10 https://github.com/awesomebytes/pepper_os/releases/download/release%2F2020-02-05T19at34plus00at00/pepper_os_ros-kinetic-x86_2020-02-05T19at34plus00at00.tar.gz.part-04 &
+aria2c -x 10 https://github.com/awesomebytes/pepper_os/releases/download/release%2F2020-02-05T19at34plus00at00/pepper_os_ros-melodic-x86_2020-02-05T19at34plus00at00.tar.gz.part-00 &
+aria2c -x 10 https://github.com/awesomebytes/pepper_os/releases/download/release%2F2020-02-05T19at34plus00at00/pepper_os_ros-melodic-x86_2020-02-05T19at34plus00at00.tar.gz.part-01 &
+aria2c -x 10 https://github.com/awesomebytes/pepper_os/releases/download/release%2F2020-02-05T19at34plus00at00/pepper_os_ros-melodic-x86_2020-02-05T19at34plus00at00.tar.gz.part-02 &
+aria2c -x 10 https://github.com/awesomebytes/pepper_os/releases/download/release%2F2020-02-05T19at34plus00at00/pepper_os_ros-melodic-x86_2020-02-05T19at34plus00at00.tar.gz.part-03 &
+aria2c -x 10 https://github.com/awesomebytes/pepper_os/releases/download/release%2F2020-02-05T19at34plus00at00/pepper_os_ros-melodic-x86_2020-02-05T19at34plus00at00.tar.gz.part-04 &
 wait
 echo "Done with all the downloads!"
 ```
@@ -28,7 +28,7 @@ echo "Done with all the downloads!"
 
 Now merge together the files, you can use the instruction from the release notes:
 ```bash
-cat pepper_os_ros-kinetic-x86_*.tar.gz.part-* > pepper_os_ros-kinetic-x86.tar.gz
+cat pepper_os_ros-melodic-x86_*.tar.gz.part-* > pepper_os_ros-melodic-x86.tar.gz
 ```
 
 **WARNING** You may want to empty the home folder of your robot, after a backup of course, before doing the next step. This includes hidden files (starting with `.`). You can do `rm -rf * .*`.
@@ -38,7 +38,7 @@ your `~/naoqi/preferences/autoload.ini` with a script that will boot roscore on 
 Now extract in your robot in one command (avoiding copying the file and then extracting):
 
 ```bash
-cat pepper_os_ros-kinetic-x86.tar.gz | ssh nao@192.168.1.12 "tar xzf - -C /home/nao"
+cat pepper_os_ros-melodic-x86.tar.gz | ssh nao@192.168.1.12 "tar xzf - -C /home/nao"
 ```
 
 Note that the `gentoo` folder uncompressed weights ~8GB and `.local` ~850MB.

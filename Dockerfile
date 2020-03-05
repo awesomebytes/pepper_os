@@ -6,7 +6,7 @@ WORKDIR /home/nao
 RUN cat /proc/cpuinfo; cat /proc/meminfo; df -h
 
 # Download and extract the latest Gentoo Prefix + ROS desktop image
-RUN last_desktop_url=`curl -s -L https://github.com/awesomebytes/ros_overlay_on_gentoo_prefix_32b/releases | grep -m 1 "ROS Kinetic desktop" | cut -d '"' -f2 | xargs -n 1 printf "http://github.com%s\n"`; \
+RUN last_desktop_url=`curl -s -L https://github.com/awesomebytes/ros_overlay_on_gentoo_prefix_32b/releases | grep -m 1 "ROS Melodic desktop" | cut -d '"' -f2 | xargs -n 1 printf "http://github.com%s\n"`; \
 curl -s -L $last_desktop_url | grep download/release | cut -d '"' -f2 | xargs -n 1 printf "https://github.com%s\n" | xargs -n 1 curl -O -L -s &&\
     cat gentoo_on_tmp* > gentoo_on_tmp.tar.gz &&\
     rm gentoo_on_tmp*.part* &&\
@@ -52,7 +52,7 @@ RUN emaint sync -a
 RUN emerge dev-python/pip
 RUN pip install --user argparse
 
-RUN echo "# required by ros-kinetic/pcl_conversions-0.2.1::ros-overlay for navigation" >> $EPREFIX/etc/portage/package.accept_keywords &&\
+RUN echo "# required by ros-melodic/pcl_conversions-0.2.1::ros-overlay for navigation" >> $EPREFIX/etc/portage/package.accept_keywords &&\
     echo "=sci-libs/pcl-9999 **" >> $EPREFIX/etc/portage/package.accept_keywords
 
 # Very ugly hack, need to fix this from whereve it came
@@ -63,11 +63,11 @@ RUN cd /tmp/gentoo/opt &&\
 
 
 RUN cd /tmp && git clone https://github.com/awesomebytes/pepper_os &&\
-    mkdir -p /tmp/gentoo/etc/portage/patches/ros-kinetic &&\
-    cp -r pepper_os/patches/* /tmp/gentoo/etc/portage/patches/ros-kinetic &&\
+    mkdir -p /tmp/gentoo/etc/portage/patches/ros-melodic &&\
+    cp -r pepper_os/patches/* /tmp/gentoo/etc/portage/patches/ros-melodic &&\
     rm -rf pepper_os
 
-# Navigation needs it becuase of ros-kinetic/move_slow_and_clear
+# Navigation needs it becuase of ros-melodic/move_slow_and_clear
 # Giving error: 
 # RUN mkdir -p /tmp/gentoo/etc/portage/patches/sci-libs/pcl-1.8.1 && \
 #     cd /tmp/gentoo/etc/portage/patches/sci-libs/pcl-1.8.1 && \
@@ -76,27 +76,27 @@ RUN echo ">=sci-libs/pcl-1.10.0" >> /tmp/gentoo/etc/portage/package.mask
 RUN echo "=sci-libs/pcl-1.9.1 **" >> /tmp/gentoo/etc/portage/package.accept_keywords
 RUN emerge sci-libs/pcl
 
-RUN emerge ros-kinetic/robot_state_publisher \
-    ros-kinetic/geometry2 \
-    ros-kinetic/ros_control
-RUN emerge ros-kinetic/image_common \
-    ros-kinetic/image_transport_plugins \
-    ros-kinetic/diagnostics \
-    ros-kinetic/octomap_msgs \
-    ros-kinetic/tf2_geometry_msgs \
-    ros-kinetic/ros_numpy \
-    ros-kinetic/ddynamic_reconfigure_python
+RUN emerge ros-melodic/robot_state_publisher \
+    ros-melodic/geometry2 \
+    ros-melodic/ros_control
+RUN emerge ros-melodic/image_common \
+    ros-melodic/image_transport_plugins \
+    ros-melodic/diagnostics \
+    ros-melodic/octomap_msgs \
+    ros-melodic/tf2_geometry_msgs \
+    ros-melodic/ros_numpy \
+    ros-melodic/ddynamic_reconfigure_python
 
 
-RUN emerge ros-kinetic/navigation
-RUN emerge ros-kinetic/slam_gmapping
-RUN emerge ros-kinetic/depthimage_to_laserscan
-RUN emerge ros-kinetic/rosbridge_suite
-RUN emerge ros-kinetic/cmake_modules \
-    ros-kinetic/naoqi_bridge_msgs \
-    ros-kinetic/perception_pcl \
-    ros-kinetic/pcl_conversions \
-    ros-kinetic/pcl_ros
+RUN emerge ros-melodic/navigation
+RUN emerge ros-melodic/slam_gmapping
+RUN emerge ros-melodic/depthimage_to_laserscan
+RUN emerge ros-melodic/rosbridge_suite
+RUN emerge ros-melodic/cmake_modules \
+    ros-melodic/naoqi_bridge_msgs \
+    ros-melodic/perception_pcl \
+    ros-melodic/pcl_conversions \
+    ros-melodic/pcl_ros
 RUN emerge media-libs/portaudio \
     net-libs/libnsl \
     dev-cpp/eigen
@@ -117,17 +117,17 @@ RUN echo "media-sound/pulseaudio -udev" >> $EPREFIX/etc/portage/package.use
 RUN emerge media-sound/pulseaudio
 
 
-RUN echo ">=ros-kinetic/mbf_simple_nav-0.2.5-r1 3-Clause" >> $EPREFIX/etc/portage/package.license
-RUN echo ">=ros-kinetic/mbf_costmap_nav-0.2.5-r1 3-Clause" >> $EPREFIX/etc/portage/package.license
-RUN echo ">=ros-kinetic/mbf_msgs-0.2.5-r1 3-Clause" >> $EPREFIX/etc/portage/package.license
-RUN echo ">=ros-kinetic/mbf_abstract_nav-0.2.5-r1 3-Clause" >> $EPREFIX/etc/portage/package.license
-RUN emerge ros-kinetic/move_base_flex
+RUN echo ">=ros-melodic/mbf_simple_nav-0.2.5-r1 3-Clause" >> $EPREFIX/etc/portage/package.license
+RUN echo ">=ros-melodic/mbf_costmap_nav-0.2.5-r1 3-Clause" >> $EPREFIX/etc/portage/package.license
+RUN echo ">=ros-melodic/mbf_msgs-0.2.5-r1 3-Clause" >> $EPREFIX/etc/portage/package.license
+RUN echo ">=ros-melodic/mbf_abstract_nav-0.2.5-r1 3-Clause" >> $EPREFIX/etc/portage/package.license
+RUN emerge ros-melodic/move_base_flex
 
-# #     ros-kinetic/naoqi_libqicore \
-# #     ros-kinetic/naoqi_libqi \
+# #     ros-melodic/naoqi_libqicore \
+# #     ros-melodic/naoqi_libqi \
 # # need the patches I made in ros_pepperfix
 
-# #     ros-kinetic/web_video_server \
+# #     ros-melodic/web_video_server \
 # # CODEC_FLAG_GLOBAL_HEADER -> AV_CODEC_FLAG_GLOBAL_HEADER
 
 # RUN pip install --user dlib
@@ -176,33 +176,40 @@ RUN pip install --user xxhash
 
 RUN pip install --user catkin_tools
 
-RUN emerge ros-kinetic/eband_local_planner
-RUN cd /tmp/gentoo/usr/local/portage/ros-kinetic/libg2o &&\
-    rm * &&\
-    wget https://raw.githubusercontent.com/ros/ros-overlay/b76f702b1acfa384f0c43679a1fe67ab4c1f99fe/ros-kinetic/libg2o/libg2o-2016.4.24.ebuild &&\
-    wget https://raw.githubusercontent.com/ros/ros-overlay/b76f702b1acfa384f0c43679a1fe67ab4c1f99fe/ros-kinetic/libg2o/metadata.xml &&\
-    ebuild libg2o-2016.4.24.ebuild manifest
+RUN emerge ros-melodic/eband_local_planner
+
+# FOR ROS MELODIC SOME MODIFICATION OF THIS WILL MOST PROBABLY BE NEEDED
+# AT LEAST THE HARDCODING OF BLAS LIBRARY FOUND
+# RUN cd /tmp/gentoo/usr/local/portage/ros-melodic/libg2o &&\
+#     rm * &&\
+#     wget https://raw.githubusercontent.com/ros/ros-overlay/b76f702b1acfa384f0c43679a1fe67ab4c1f99fe/ros-melodic/libg2o/libg2o-2016.4.24.ebuild &&\
+#     wget https://raw.githubusercontent.com/ros/ros-overlay/b76f702b1acfa384f0c43679a1fe67ab4c1f99fe/ros-melodic/libg2o/metadata.xml &&\
+#     ebuild libg2o-2016.4.24.ebuild manifest
 # # # undocumented dependency of teb_local_planner
 # RUN emerge sci-libs/suitesparse
-RUN cd /tmp/gentoo/etc/portage/patches/ros-kinetic &&\
-    mkdir -p libg2o-2016.4.24 &&\
-    cd libg2o-2016.4.24 &&\
-    wget https://gist.githubusercontent.com/awesomebytes/97aad67cbc86deb93a76ace964241848/raw/bc83232c2ff5df872db0d3d46d49aca1a78ecbc7/001-Debug-cholmod.patch &&\
-    wget https://gist.githubusercontent.com/awesomebytes/79bafc394be8389d6430393edf77be47/raw/faae7ba38692d05c841b0aa3495e1618a3a70ca0/002-Hardcode-BLAS.patch
+# RUN cd /tmp/gentoo/etc/portage/patches/ros-melodic &&\
+#     mkdir -p libg2o-2016.4.24 &&\
+#     cd libg2o-2016.4.24 &&\
+#     wget https://gist.githubusercontent.com/awesomebytes/97aad67cbc86deb93a76ace964241848/raw/bc83232c2ff5df872db0d3d46d49aca1a78ecbc7/001-Debug-cholmod.patch &&\
+#     wget https://gist.githubusercontent.com/awesomebytes/79bafc394be8389d6430393edf77be47/raw/faae7ba38692d05c841b0aa3495e1618a3a70ca0/002-Hardcode-BLAS.patch
+
 RUN emerge sci-libs/cholmod
 RUN cd /tmp/gentoo/usr/lib/cmake/Qt5Gui; find ./ -type f -exec sed -i -e 's@/home/user@/tmp@g' {} \;
-RUN emerge ros-kinetic/libg2o
-RUN cd /tmp/gentoo/etc/portage/patches/ros-kinetic &&\
-    mkdir -p teb_local_planner &&\
-    cd teb_local_planner &&\
-    wget https://gist.githubusercontent.com/awesomebytes/0e84ce3539cdbe6d8013a75f17de34a1/raw/c72c8d4f7d307e553629f18dab1c11d184e5295d/0001-Adapt-for-Gentoo-Prefix-on-tmp-gentoo.patch
-RUN emerge ros-kinetic/teb_local_planner
-RUN emerge ros-kinetic/dwa_local_planner
+RUN emerge ros-melodic/libg2o
+
+# FOR MELODIC SOME PATCH WILL NEEDED TO BE DONE TOO, AS THERE ARE HARDCODED PATHS NOT INCLUDING PREFIX ONES
+# RUN cd /tmp/gentoo/etc/portage/patches/ros-melodic &&\
+#     mkdir -p teb_local_planner &&\
+#     cd teb_local_planner &&\
+#     wget https://gist.githubusercontent.com/awesomebytes/0e84ce3539cdbe6d8013a75f17de34a1/raw/c72c8d4f7d307e553629f18dab1c11d184e5295d/0001-Adapt-for-Gentoo-Prefix-on-tmp-gentoo.patch
+
+RUN emerge ros-melodic/teb_local_planner
+RUN emerge ros-melodic/dwa_local_planner
 # Workaround
-RUN cd /tmp/gentoo/usr/local/portage/ros-kinetic/sbpl_lattice_planner &&\
+RUN cd /tmp/gentoo/usr/local/portage/ros-melodic/sbpl_lattice_planner &&\
     rm Manifest && \
     ebuild sbpl*.ebuild manifest
-RUN emerge ros-kinetic/sbpl_lattice_planner
+RUN emerge ros-melodic/sbpl_lattice_planner
 
 # Meanwhile https://bugs.gentoo.org/705974 gets fixed upstream (make has a backward incompatible change)
 RUN mkdir -p $EPREFIX/etc/portage/patches/media-libs/gstreamer-1.14.5 &&\
@@ -221,14 +228,14 @@ RUN emerge media-plugins/gst-plugins-opus \
     media-plugins/gst-plugins-lame
 RUN emerge media-plugins/gst-plugins-x264 media-plugins/gst-plugins-x265
 
-RUN cd /tmp/gentoo/usr/local/portage/ros-kinetic/gscam &&\
-    wget  https://raw.githubusercontent.com/ros/ros-overlay/80a3d06744df220fadb34b638d94d4336af2b720/ros-kinetic/gscam/Manifest&&\
+RUN cd /tmp/gentoo/usr/local/portage/ros-melodic/gscam &&\
+    wget  https://raw.githubusercontent.com/ros/ros-overlay/80a3d06744df220fadb34b638d94d4336af2b720/ros-melodic/gscam/Manifest&&\
     mkdir files && cd files &&\
-    wget https://raw.githubusercontent.com/ros/ros-overlay/80a3d06744df220fadb34b638d94d4336af2b720/ros-kinetic/gscam/files/0001-Prefer-Gstreamer-1.0-over-0.10.patch &&\
-    wget https://raw.githubusercontent.com/ros/ros-overlay/80a3d06744df220fadb34b638d94d4336af2b720/ros-kinetic/gscam/files/Add-CMAKE-flag-to-compile-with-Gstreamer-version-1.x.patch &&\
-    cd .. && wget https://raw.githubusercontent.com/ros/ros-overlay/80a3d06744df220fadb34b638d94d4336af2b720/ros-kinetic/gscam/gscam-1.0.1.ebuild &&\
+    wget https://raw.githubusercontent.com/ros/ros-overlay/80a3d06744df220fadb34b638d94d4336af2b720/ros-melodic/gscam/files/0001-Prefer-Gstreamer-1.0-over-0.10.patch &&\
+    wget https://raw.githubusercontent.com/ros/ros-overlay/80a3d06744df220fadb34b638d94d4336af2b720/ros-melodic/gscam/files/Add-CMAKE-flag-to-compile-with-Gstreamer-version-1.x.patch &&\
+    cd .. && wget https://raw.githubusercontent.com/ros/ros-overlay/80a3d06744df220fadb34b638d94d4336af2b720/ros-melodic/gscam/gscam-1.0.1.ebuild &&\
     ebuild gscam-1.0.1.ebuild manifest
-RUN emerge ros-kinetic/gscam
+RUN emerge ros-melodic/gscam
 
 # Install in our locally known path pynaoqi (to avoid sourcing /opt/aldebaran/lib/python2.7...)
 RUN wget https://github.com/awesomebytes/pepper_os/releases/download/pynaoqi-python2.7-2.5.5.5-linux32/pynaoqi-python2.7-2.5.5.5-linux32.tar.gz &&\
@@ -237,23 +244,23 @@ RUN wget https://github.com/awesomebytes/pepper_os/releases/download/pynaoqi-pyt
     tar xvf /home/nao/pynaoqi-python2.7-2.5.5.5-linux32.tar.gz &&\
     rm /home/nao/pynaoqi-python2.7-2.5.5.5-linux32.tar.gz
 
-# RUN cd /tmp/gentoo/usr/local/portage/ros-kinetic/naoqi_libqicore &&\
+# RUN cd /tmp/gentoo/usr/local/portage/ros-melodic/naoqi_libqicore &&\
 #     rm Manifest && \
 #     ebuild naoqi*.ebuild manifest
 
 # TODO: Fix naoqi_libqi with boost 1.71
-# RUN emerge ros-kinetic/naoqi_libqi ros-kinetic/naoqi_libqicore
+# RUN emerge ros-melodic/naoqi_libqi ros-melodic/naoqi_libqicore
 
 # TODO: this errors... shouldn't be too bad
-# RUN emerge ros-kinetic/pepper_meshes
+# RUN emerge ros-melodic/pepper_meshes
 
 RUN emerge dev-libs/libusb
 
 RUN pip install --user dill cloudpickle
 RUN pip install --user uptime
 
-RUN emerge ros-kinetic/humanoid_nav_msgs
-RUN emerge ros-kinetic/rgbd_launch
+RUN emerge ros-melodic/humanoid_nav_msgs
+RUN emerge ros-melodic/rgbd_launch
 
 # Fix all python shebangs
 RUN cd ~/.local/bin &&\

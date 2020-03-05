@@ -1,7 +1,7 @@
 # Gentoo (portage) Prefix installed packages on pepper_os
 (As of 6/2/2020)
 
-767 packages (including the 274 ROS Kinetic packages).
+767 packages (including the 274 ROS Melodic packages).
 
 From the output of:
 ```bash
@@ -383,7 +383,7 @@ bluez-5.52
 /tmp/gentoo/var/db/pkg/perl-core:
 File-Temp-0.230.900
 
-/tmp/gentoo/var/db/pkg/ros-kinetic:
+/tmp/gentoo/var/db/pkg/ros-melodic:
 actionlib-1.11.13
 actionlib_msgs-1.12.7
 actionlib_tutorials-0.1.10

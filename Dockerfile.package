@@ -8,7 +8,7 @@ RUN emerge app-portage/gentoolkit
 RUN eclean -d distfiles
 RUN df -h
 # If we don't do --remove-files we may not have enough disk space
-# I was getting: tar: gentoo/opt/ros/kinetic/lib/pkgconfig: file changed as we read it and tar returned 1
+# I was getting: tar: gentoo/opt/ros/melodic/lib/pkgconfig: file changed as we read it and tar returned 1
 # so forcing true, as the .tar.gz is actually correctly created
 RUN cd /home/nao; tar czf /tmp/pepper_os.tar.gz gentoo .local .bash_profile .keras naoqi --remove-files || true
 
