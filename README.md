@@ -1,6 +1,6 @@
 # pepper_os
 
-[![Build Status](https://dev.azure.com/ROOGP/ROOGP_CI/_apis/build/status/awesomebytes.pepper_os?branchName=master)](https://dev.azure.com/ROOGP/ROOGP_CI/_build?definitionId=1&_a=summary)
+[![Build Status](https://dev.azure.com/ROOGP/ROOGP_CI/_apis/build/status/awesomebytes.pepper_os?branchName=master)](https://dev.azure.com/ROOGP/ROOGP_CI/_build?definitionId=1&_a=summary&view=runs)
 
 Building over [Gentoo Prefix](https://github.com/awesomebytes/gentoo_prefix_ci_32b), over that [ros-overlay](https://github.com/awesomebytes/ros_overlay_on_gentoo_prefix_32b/), plus anything extra
 needed to make Pepper robots able to do more with the latest available software. The base image is the
