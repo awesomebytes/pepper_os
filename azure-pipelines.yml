@@ -95,6 +95,7 @@ jobs:
         export BODY="Extract with: cat ${RELEASE_FILE_NAME}.part-* > ${RELEASE_FILE_NAME}; tar xvf pepper_os*.tar.gz; ./gentoo/startprefix"
         mv $HOME/pepper_os.tar.gz ${RELEASE_FILE_NAME}
         split -b 1024MB -d ${RELEASE_FILE_NAME} ${RELEASE_FILE_NAME}.part-
+        docker system prune -a -f
         rm ${RELEASE_FILE_NAME}
         export PATH=$HOME/.local/bin:$PATH
         export PYTHONPATH=$HOME/.local/lib/python2.7/site-packages:$PYTHONPATH

@@ -10,6 +10,6 @@ RUN df -h
 # If we don't do --remove-files we may not have enough disk space
 # I was getting: tar: gentoo/opt/ros/melodic/lib/pkgconfig: file changed as we read it and tar returned 1
 # so forcing true, as the .tar.gz is actually correctly created
-RUN cd /home/nao; tar czf /tmp/pepper_os.tar.gz -C /tmp gentoo -C /home/nao .local -C /home/nao .bash_profile -C /home/nao .keras -C /home/nao naoqi --remove-files || true
+RUN cd /home/nao; tar czf /tmp/pepper_os.tar.gz -C /home/nao gentoo -C /home/nao .local -C /home/nao .bash_profile -C /home/nao .keras -C /home/nao naoqi --remove-files || true
 
 ENTRYPOINT ["/tmp/gentoo/startprefix"]
