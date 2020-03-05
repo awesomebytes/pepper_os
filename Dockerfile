@@ -55,6 +55,10 @@ RUN pip install --user argparse
 RUN echo "# required by ros-melodic/pcl_conversions-0.2.1::ros-overlay for navigation" >> $EPREFIX/etc/portage/package.accept_keywords &&\
     echo "=sci-libs/pcl-9999 **" >> $EPREFIX/etc/portage/package.accept_keywords
 
+# TO BE REMOVED once a build finishes in ros_overlay_on_gentoo_prefix_32b
+RUN cd $EPREFIX/usr/lib &&\
+    ln -f -s libboost_python27.so libboost_python.so
+
 # Very ugly hack, need to fix this from whereve it came
 # some packages are affected, others arent, weird
 RUN cd /tmp/gentoo/opt &&\
