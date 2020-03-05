@@ -91,7 +91,7 @@ jobs:
         export DATE=$(date -I'minutes' | sed 's/+/plus/g'| sed 's/:/at/g')
         export RELEASE_TAG=release/${DATE}
         export RELEASE_FILE_NAME=pepper_os_$(rosdistro)-${PLATFORM}_${DATE}.tar.gz
-        export RELEASE_NAME="Pepper OS based on Gentoo Prefix and ROS"
+        export RELEASE_NAME="Pepper OS based on Gentoo Prefix and ROS Melodic"
         export BODY="Extract with: cat ${RELEASE_FILE_NAME}.part-* > ${RELEASE_FILE_NAME}; tar xvf pepper_os*.tar.gz; ./gentoo/startprefix"
         mv $HOME/pepper_os.tar.gz ${RELEASE_FILE_NAME}
         split -b 1024MB -d ${RELEASE_FILE_NAME} ${RELEASE_FILE_NAME}.part-
