@@ -197,14 +197,14 @@ RUN emerge ros-melodic/eband_local_planner
 #     wget https://raw.githubusercontent.com/ros/ros-overlay/b76f702b1acfa384f0c43679a1fe67ab4c1f99fe/ros-melodic/libg2o/metadata.xml &&\
 #     ebuild libg2o-2016.4.24.ebuild manifest
 # # # undocumented dependency of teb_local_planner
-# RUN emerge sci-libs/suitesparse
+RUN emerge sci-libs/suitesparse
 # RUN cd /tmp/gentoo/etc/portage/patches/ros-melodic &&\
 #     mkdir -p libg2o-2016.4.24 &&\
 #     cd libg2o-2016.4.24 &&\
 #     wget https://gist.githubusercontent.com/awesomebytes/97aad67cbc86deb93a76ace964241848/raw/bc83232c2ff5df872db0d3d46d49aca1a78ecbc7/001-Debug-cholmod.patch &&\
 #     wget https://gist.githubusercontent.com/awesomebytes/79bafc394be8389d6430393edf77be47/raw/faae7ba38692d05c841b0aa3495e1618a3a70ca0/002-Hardcode-BLAS.patch
 
-RUN emerge sci-libs/cholmod
+# RUN emerge sci-libs/cholmod
 RUN cd /tmp/gentoo/usr/lib/cmake/Qt5Gui; find ./ -type f -exec sed -i -e 's@/home/user@/tmp@g' {} \;
 RUN emerge ros-melodic/libg2o
 
