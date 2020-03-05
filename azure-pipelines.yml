@@ -94,6 +94,7 @@ jobs:
         export RELEASE_NAME="Pepper OS based on Gentoo Prefix and ROS Kinetic"
         export BODY="Extract with: cat ${RELEASE_FILE_NAME}.part-* > ${RELEASE_FILE_NAME}; tar xvf pepper_os*.tar.gz; ./gentoo/startprefix"
         mv $HOME/pepper_os.tar.gz ${RELEASE_FILE_NAME}
+        docker systen prune -a -f
         split -b 1024MB -d ${RELEASE_FILE_NAME} ${RELEASE_FILE_NAME}.part-
         rm ${RELEASE_FILE_NAME}
         export PATH=$HOME/.local/bin:$PATH
