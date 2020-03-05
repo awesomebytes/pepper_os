@@ -45,7 +45,7 @@ RUN echo "CHOST=i686-pc-linux-gnu" >> $EPREFIX/etc/portage/make.conf
 
 # Update our source repos first
 # Because we may have previous patches that won't allow to do a sync...
-RUN cd $EPREFIX/usr/local/portage && git reset --hard
+RUN cd $EPREFIX/usr/local/portage && git clean -f && git reset --hard
 # Now we can update
 RUN emaint sync -a
 # Prepare python
