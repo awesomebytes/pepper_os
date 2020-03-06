@@ -213,11 +213,10 @@ RUN emerge sci-libs/suitesparse
 RUN cd /tmp/gentoo/usr/lib/cmake/Qt5Gui; find ./ -type f -exec sed -i -e 's@/home/user@/tmp@g' {} \;
 RUN emerge ros-melodic/libg2o
 
-# FOR MELODIC SOME PATCH WILL NEEDED TO BE DONE TOO, AS THERE ARE HARDCODED PATHS NOT INCLUDING PREFIX ONES
-# RUN cd /tmp/gentoo/etc/portage/patches/ros-melodic &&\
-#     mkdir -p teb_local_planner &&\
-#     cd teb_local_planner &&\
-#     wget https://gist.githubusercontent.com/awesomebytes/0e84ce3539cdbe6d8013a75f17de34a1/raw/c72c8d4f7d307e553629f18dab1c11d184e5295d/0001-Adapt-for-Gentoo-Prefix-on-tmp-gentoo.patch
+RUN cd /tmp/gentoo/etc/portage/patches/ros-melodic &&\
+    mkdir -p teb_local_planner &&\
+    cd teb_local_planner &&\
+    wget https://gist.githubusercontent.com/awesomebytes/0e84ce3539cdbe6d8013a75f17de34a1/raw/c72c8d4f7d307e553629f18dab1c11d184e5295d/0001-Adapt-for-Gentoo-Prefix-on-tmp-gentoo.patch
 
 RUN emerge ros-melodic/teb_local_planner
 RUN emerge ros-melodic/dwa_local_planner
