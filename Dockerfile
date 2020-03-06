@@ -189,7 +189,11 @@ RUN cd /tmp/gentoo/etc/portage/patches/ros-kinetic &&\
     cd libg2o-2016.4.24 &&\
     wget https://gist.githubusercontent.com/awesomebytes/97aad67cbc86deb93a76ace964241848/raw/bc83232c2ff5df872db0d3d46d49aca1a78ecbc7/001-Debug-cholmod.patch &&\
     wget https://gist.githubusercontent.com/awesomebytes/79bafc394be8389d6430393edf77be47/raw/faae7ba38692d05c841b0aa3495e1618a3a70ca0/002-Hardcode-BLAS.patch
-RUN emerge sci-libs/cholmod
+# cholmod-2.1.2 does not build with amd-2.4.6 and colamd-2.9.6
+# cholmod is needed for suitesparse, and suitesparse is needed on libg2o
+RUN echo ">=sci-libs/amd-2.4.6" >> $EPREFIX/etc/portage/package.mask
+RUN echo ">=sci-libs/colamd-2.9.6" >> $EPREFIX/etc/portage/package.mask
+RUN emerge sci-libs/suitesparse
 RUN cd /tmp/gentoo/usr/lib/cmake/Qt5Gui; find ./ -type f -exec sed -i -e 's@/home/user@/tmp@g' {} \;
 RUN emerge ros-kinetic/libg2o
 RUN cd /tmp/gentoo/etc/portage/patches/ros-kinetic &&\
