@@ -196,7 +196,12 @@ RUN emerge ros-melodic/eband_local_planner
 #     wget https://raw.githubusercontent.com/ros/ros-overlay/b76f702b1acfa384f0c43679a1fe67ab4c1f99fe/ros-melodic/libg2o/libg2o-2016.4.24.ebuild &&\
 #     wget https://raw.githubusercontent.com/ros/ros-overlay/b76f702b1acfa384f0c43679a1fe67ab4c1f99fe/ros-melodic/libg2o/metadata.xml &&\
 #     ebuild libg2o-2016.4.24.ebuild manifest
+
 # # # undocumented dependency of teb_local_planner
+# cholmod-2.1.2 does not build with amd-2.4.6 and colamd-2.9.6
+# cholmod is needed for suitesparse, and suitesparse is needed on libg2o
+RUN echo ">=sci-libs/amd-2.4.6" >> $EPREFIX/etc/portage/package.mask
+RUN echo ">=sci-libs/colamd-2.9.6" >> $EPREFIX/etc/portage/package.mask
 RUN emerge sci-libs/suitesparse
 # RUN cd /tmp/gentoo/etc/portage/patches/ros-melodic &&\
 #     mkdir -p libg2o-2016.4.24 &&\
