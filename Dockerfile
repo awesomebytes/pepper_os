@@ -243,13 +243,13 @@ RUN emerge media-plugins/gst-plugins-opus \
     media-plugins/gst-plugins-lame
 RUN emerge media-plugins/gst-plugins-x264 media-plugins/gst-plugins-x265
 
-RUN cd /tmp/gentoo/usr/local/portage/ros-melodic/gscam &&\
-    wget  https://raw.githubusercontent.com/ros/ros-overlay/80a3d06744df220fadb34b638d94d4336af2b720/ros-melodic/gscam/Manifest&&\
-    mkdir files && cd files &&\
-    wget https://raw.githubusercontent.com/ros/ros-overlay/80a3d06744df220fadb34b638d94d4336af2b720/ros-melodic/gscam/files/0001-Prefer-Gstreamer-1.0-over-0.10.patch &&\
-    wget https://raw.githubusercontent.com/ros/ros-overlay/80a3d06744df220fadb34b638d94d4336af2b720/ros-melodic/gscam/files/Add-CMAKE-flag-to-compile-with-Gstreamer-version-1.x.patch &&\
-    cd .. && wget https://raw.githubusercontent.com/ros/ros-overlay/80a3d06744df220fadb34b638d94d4336af2b720/ros-melodic/gscam/gscam-1.0.1.ebuild &&\
-    ebuild gscam-1.0.1.ebuild manifest
+# RUN cd /tmp/gentoo/usr/local/portage/ros-melodic/gscam &&\
+#     wget  https://raw.githubusercontent.com/ros/ros-overlay/80a3d06744df220fadb34b638d94d4336af2b720/ros-melodic/gscam/Manifest&&\
+#     mkdir files && cd files &&\
+#     wget https://raw.githubusercontent.com/ros/ros-overlay/80a3d06744df220fadb34b638d94d4336af2b720/ros-melodic/gscam/files/0001-Prefer-Gstreamer-1.0-over-0.10.patch &&\
+#     wget https://raw.githubusercontent.com/ros/ros-overlay/80a3d06744df220fadb34b638d94d4336af2b720/ros-melodic/gscam/files/Add-CMAKE-flag-to-compile-with-Gstreamer-version-1.x.patch &&\
+#     cd .. && wget https://raw.githubusercontent.com/ros/ros-overlay/80a3d06744df220fadb34b638d94d4336af2b720/ros-melodic/gscam/gscam-1.0.1.ebuild &&\
+#     ebuild gscam-1.0.1.ebuild manifest
 RUN emerge ros-melodic/gscam
 
 # Install in our locally known path pynaoqi (to avoid sourcing /opt/aldebaran/lib/python2.7...)
