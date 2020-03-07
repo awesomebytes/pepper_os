@@ -19,7 +19,6 @@ curl -s -L $last_desktop_url | grep download/release | cut -d '"' -f2 | xargs -n
     tar xf gentoo_on_tmp.tar.lzma &&\
     rm gentoo_on_tmp.tar.lzma
 
-RUN echo "Done with dl"
 # Fix permissions of tmp
 USER root
 RUN chmod a=rwx,o+t /tmp
