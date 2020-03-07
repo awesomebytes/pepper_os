@@ -274,7 +274,8 @@ RUN emerge dev-libs/libusb
 RUN pip install --user dill cloudpickle
 RUN pip install --user uptime
 
-RUN emerge ros-melodic/humanoid_nav_msgs
+# Apparently not available for melodic. If needed, just use from source
+# RUN emerge ros-melodic/humanoid_nav_msgs
 RUN emerge ros-melodic/rgbd_launch
 
 # Fix all python shebangs
