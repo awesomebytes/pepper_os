@@ -6,7 +6,7 @@ jobs:
       vmImage: 'Ubuntu 16.04'
 
     variables:
-      docker_image_name: pepper_os_image
+      docker_image_name: pepper_os_image_melodic
 
     steps:
     - script: docker build --network host -f Dockerfile -t $(DockerHub_user)/$(docker_image_name):$(Build.BuildId) .
@@ -45,7 +45,7 @@ jobs:
       vmImage: 'Ubuntu 16.04'
 
     variables:
-      docker_image_name: pepper_os_image_package_stage
+      docker_image_name: pepper_os_image_melodic_package_stage
       platform: x86
       rosdistro: ros-melodic
 

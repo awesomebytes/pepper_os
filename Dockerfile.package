@@ -1,4 +1,4 @@
-from awesomebytes/pepper_os_image
+from awesomebytes/pepper_os_image_melodic
 
 RUN df -h
 
