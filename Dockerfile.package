@@ -6,6 +6,11 @@ RUN df -h
 RUN rm -rf $EPREFIX/var/cache/binpkgs/* $EPREFIX/var/tmp/* /home/nao/.cache/*
 RUN emerge app-portage/gentoolkit
 RUN eclean -d distfiles
+# Hack to earn extra 500MB~
+USER root
+RUN rm -rf /opt
+USER nao
+
 RUN df -h
 # If we don't do --remove-files we may not have enough disk space
 # I was getting: tar: gentoo/opt/ros/melodic/lib/pkgconfig: file changed as we read it and tar returned 1
