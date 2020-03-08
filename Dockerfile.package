@@ -7,9 +7,12 @@ RUN rm -rf $EPREFIX/var/cache/binpkgs/* $EPREFIX/var/tmp/* /home/nao/.cache/*
 RUN emerge app-portage/gentoolkit
 RUN eclean -d distfiles
 # Hack to earn extra 500MB~
+SHELL ["/bin/bash"]
 USER root
 RUN rm -rf /opt
 USER nao
+SHELL ["/tmp/gentoo/executeonprefix"]
+
 
 RUN df -h
 # If we don't do --remove-files we may not have enough disk space
