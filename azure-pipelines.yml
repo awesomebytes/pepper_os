@@ -9,13 +9,13 @@ jobs:
       docker_image_name: pepper_os_image
 
     steps:
-    - script: docker login -u $(DockerHub_user) -p $(DockerHub_password)
-      displayName: 'docker login'
-    # We divide the boostrap in 3 parts to not go over the 6h limit as gcc takes ages
     - script: docker build --network host -f Dockerfile -t $(DockerHub_user)/$(docker_image_name):$(Build.BuildId) .
       displayName: 'docker build'
       # This means up to 6h
       timeoutInMinutes: 0
+
+    - script: docker login -u $(DockerHub_user) -p $(DockerHub_password)
+      displayName: 'docker login'
       # Even if it fails I want to push the image to DockerHub for inspection
     # The variables are set on the Build options on the web interface
     # # Try to tag the latest failed image we ran
@@ -50,14 +50,14 @@ jobs:
       rosdistro: ros-melodic
 
     steps:
-    # The variables are set on the Build options on the web interface
-    - script: docker login -u $(DockerHub_user) -p $(DockerHub_password)
-      displayName: 'docker login'
-
     - script: docker build -f Dockerfile.package -t $(DockerHub_user)/$(docker_image_name):$(Build.BuildId) .
       displayName: 'docker build package_stage'
       # This means up to 6h
       timeoutInMinutes: 0
+
+    # The variables are set on the Build options on the web interface
+    - script: docker login -u $(DockerHub_user) -p $(DockerHub_password)
+      displayName: 'docker login'
       # Even if it fails I want to push the image to DockerHub for inspection
     - script: docker tag `docker ps -a -l -q | xargs docker commit | awk -F":" '{print $2}'` $(DockerHub_user)/$(docker_image_name):$(Build.BuildId)
       displayName: 'create image to push to DockerHub'
