@@ -7,7 +7,7 @@ from awesomebytes/pepper_os_image_melodic
 # RUN emerge app-portage/gentoolkit
 # RUN eclean -d distfiles
 # Hack to earn extra 500MB~
-SHELL ["/bin/bash"]
+SHELL ["/bin/sh", "-c"]
 USER root
 # WORKDIR /
 RUN ls -lah
