@@ -50,6 +50,10 @@ jobs:
       rosdistro: ros-melodic
 
     steps:
+    - script: df -h && df && cat /proc/meminfo
+      displayName: 'Check disk space and RAM'
+    - script: docker system prune -a -f && df -h && df
+      displayName: 'probably useless docker cleanup'
     - script: docker build -f Dockerfile.package -t $(DockerHub_user)/$(docker_image_name):$(Build.BuildId) .
       displayName: 'docker build package_stage'
       # This means up to 6h
