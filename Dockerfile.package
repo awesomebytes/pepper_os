@@ -9,6 +9,7 @@ RUN eclean -d distfiles
 # Hack to earn extra 500MB~
 SHELL ["/bin/bash"]
 USER root
+RUN ls -lah /
 RUN rm -rf /opt
 USER nao
 SHELL ["/tmp/gentoo/executeonprefix"]
