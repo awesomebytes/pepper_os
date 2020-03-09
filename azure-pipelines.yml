@@ -50,14 +50,16 @@ jobs:
       rosdistro: ros-kinetic
 
     steps:
-    # The variables are set on the Build options on the web interface
-    - script: docker login -u $(DockerHub_user) -p $(DockerHub_password)
-      displayName: 'docker login'
+    - script: df -h && df && cat /proc/meminfo && docker system prune -a -f && df -h && df
+      displayName: 'Check disk space and RAM and docker cleanup'
 
     - script: docker build -f Dockerfile.package -t $(DockerHub_user)/$(docker_image_name):$(Build.BuildId) .
       displayName: 'docker build package_stage'
       # This means up to 6h
       timeoutInMinutes: 0
+    # The variables are set on the Build options on the web interface
+    - script: docker login -u $(DockerHub_user) -p $(DockerHub_password)
+      displayName: 'docker login'
       # Even if it fails I want to push the image to DockerHub for inspection
     - script: docker tag `docker ps -a -l -q | xargs docker commit | awk -F":" '{print $2}'` $(DockerHub_user)/$(docker_image_name):$(Build.BuildId)
       displayName: 'create image to push to DockerHub'
@@ -78,8 +80,8 @@ jobs:
     # Create a temporal container to copy the pepper_os.tar.gz
     - script: |
         id=$(docker create $(DockerHub_user)/$(docker_image_name))
-        docker cp $id:/tmp/pepper_os.tar.gz $HOME
-      displayName: 'Extract pepper_os.tar.gz from Docker image'
+        docker cp $id:/tmp/pepper_os.tar.lzma $HOME
+      displayName: 'Extract pepper_os.tar.lzma from Docker image'
     # Not really needed
     # - script: docker rm -v $id
     # Make a release
@@ -90,10 +92,10 @@ jobs:
     - script: |
         export DATE=$(date -I'minutes' | sed 's/+/plus/g'| sed 's/:/at/g')
         export RELEASE_TAG=release/${DATE}
-        export RELEASE_FILE_NAME=pepper_os_$(rosdistro)-${PLATFORM}_${DATE}.tar.gz
+        export RELEASE_FILE_NAME=pepper_os_$(rosdistro)-${PLATFORM}_${DATE}.tar.lzma
         export RELEASE_NAME="Pepper OS based on Gentoo Prefix and ROS Kinetic"
-        export BODY="Extract with: cat ${RELEASE_FILE_NAME}.part-* > ${RELEASE_FILE_NAME}; tar xvf pepper_os*.tar.gz; ./gentoo/startprefix"
-        mv $HOME/pepper_os.tar.gz ${RELEASE_FILE_NAME}
+        export BODY="Extract with: cat ${RELEASE_FILE_NAME}.part-* > ${RELEASE_FILE_NAME}; tar xvf pepper_os*.tar.lzma; ./gentoo/startprefix"
+        mv $HOME/pepper_os.tar.lzma ${RELEASE_FILE_NAME}
         docker system prune -a -f
         split -b 1024MB -d ${RELEASE_FILE_NAME} ${RELEASE_FILE_NAME}.part-
         rm ${RELEASE_FILE_NAME}
