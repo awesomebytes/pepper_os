@@ -1,14 +1,17 @@
 from awesomebytes/pepper_os_image_melodic
 
-RUN df -h
+# RUN df -h
 
-# cleanup space first
-RUN rm -rf $EPREFIX/var/cache/binpkgs/* $EPREFIX/var/tmp/* /home/nao/.cache/*
-RUN emerge app-portage/gentoolkit
-RUN eclean -d distfiles
+# # cleanup space first
+# RUN rm -rf $EPREFIX/var/cache/binpkgs/* $EPREFIX/var/tmp/* /home/nao/.cache/*
+# RUN emerge app-portage/gentoolkit
+# RUN eclean -d distfiles
 # Hack to earn extra 500MB~
 SHELL ["/bin/bash"]
 USER root
+# WORKDIR /
+RUN ls -lah
+RUN df -h
 RUN ls -lah /
 RUN rm -rf /opt
 USER nao
