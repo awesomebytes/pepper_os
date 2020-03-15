@@ -55,10 +55,6 @@ RUN pip install --user argparse
 RUN echo "# required by ros-melodic/pcl_conversions-0.2.1::ros-overlay for navigation" >> $EPREFIX/etc/portage/package.accept_keywords &&\
     echo "=sci-libs/pcl-9999 **" >> $EPREFIX/etc/portage/package.accept_keywords
 
-# TO BE REMOVED once a build finishes in ros_overlay_on_gentoo_prefix_32b
-RUN cd $EPREFIX/usr/lib &&\
-    ln -f -s libboost_python27.so libboost_python.so
-
 # Very ugly hack, need to fix this from whereve it came
 # some packages are affected, others arent, weird
 RUN cd /tmp/gentoo/opt &&\
@@ -82,8 +78,8 @@ RUN emerge sci-libs/pcl
 
 RUN emerge ros-melodic/robot_state_publisher \
     ros-melodic/geometry2 \
-    ros-melodic/ros_control
-RUN emerge ros-melodic/image_common \
+    ros-melodic/ros_control \
+    emerge ros-melodic/image_common \
     ros-melodic/image_transport_plugins \
     ros-melodic/diagnostics \
     ros-melodic/octomap_msgs \
@@ -91,12 +87,6 @@ RUN emerge ros-melodic/image_common \
     ros-melodic/ros_numpy \
     ros-melodic/ddynamic_reconfigure_python
 
-# Until https://github.com/ros/ros-overlay/pull/964 is merged
-# navigation pulls amcl, and amcl needs the last version to build
-RUN rm $EPREFIX/usr/local/portage/ros-melodic/amcl/* &&\
-    wget https://raw.githubusercontent.com/ros/ros-overlay/b6e46acea5918e68db3b4d2e00bb1a2caa779cb9/ros-melodic/amcl/Manifest -O $EPREFIX/usr/local/portage/ros-melodic/amcl/Manifest &&\
-    wget https://raw.githubusercontent.com/ros/ros-overlay/b6e46acea5918e68db3b4d2e00bb1a2caa779cb9/ros-melodic/amcl/amcl-1.16.4-r1.ebuild -O $EPREFIX/usr/local/portage/ros-melodic/amcl/amcl-1.16.4-r1.ebuild &&\
-    emerge ros-melodic/amcl
 
 # Until https://github.com/ros-planning/navigation/pull/974 is merged and re-released
 RUN mkdir -p $EPREFIX/etc/portage/patches/ros-melodic/voxel_grid-1.16.4-r1
@@ -105,42 +95,50 @@ RUN wget https://gist.githubusercontent.com/awesomebytes/09699bfbd8c07f80e92069b
 
 RUN emerge ros-melodic/navigation
 RUN emerge ros-melodic/slam_gmapping
-RUN emerge ros-melodic/depthimage_to_laserscan
-RUN emerge ros-melodic/rosbridge_suite
 RUN emerge ros-melodic/cmake_modules \
     ros-melodic/naoqi_bridge_msgs \
     ros-melodic/perception_pcl \
     ros-melodic/pcl_conversions \
-    ros-melodic/pcl_ros
+    ros-melodic/pcl_ros \
+    ros-melodic/depthimage_to_laserscan \
+    ros-melodic/rosbridge_suite
 RUN emerge media-libs/portaudio \
     net-libs/libnsl \
-    dev-cpp/eigen
-
-RUN emerge media-libs/opus
+    dev-cpp/eigen \
+    media-libs/opus
 
 # emerging pulseaudio asks for this
-RUN echo ">=media-plugins/alsa-plugins-1.2.1 pulseaudio" >> $EPREFIX/etc/portage/package.use
-# To avoid:
-#  * Error: circular dependencies:
-# (sys-libs/pam-1.3.1-r1:0/0::gentoo, ebuild scheduled for merge) depends on
-#  (sys-libs/libcap-2.27:0/0::gentoo, ebuild scheduled for merge) (buildtime)
-#   (sys-libs/pam-1.3.1-r1:0/0::gentoo, ebuild scheduled for merge) (buildtime)
-RUN echo ">=sys-libs/libcap-2.27 -pam" >> $EPREFIX/etc/portage/package.use
-# Until https://bugs.gentoo.org/702566 it's solved
-RUN echo ">=sys-libs/libcap-2.28" >> $EPREFIX/etc/portage/package.mask
-RUN echo "media-sound/pulseaudio -udev" >> $EPREFIX/etc/portage/package.use
-RUN emerge media-sound/pulseaudio
+RUN echo ">=media-plugins/alsa-plugins-1.2.1 pulseaudio" >> $EPREFIX/etc/portage/package.use &&\
+    echo "media-sound/pulseaudio -udev" >> $EPREFIX/etc/portage/package.use &&\
+    emerge media-sound/pulseaudio
 
 
-RUN echo ">=ros-melodic/mbf_simple_nav-0.2.5-r1 3-Clause" >> $EPREFIX/etc/portage/package.license
-RUN echo ">=ros-melodic/mbf_costmap_nav-0.2.5-r1 3-Clause" >> $EPREFIX/etc/portage/package.license
-RUN echo ">=ros-melodic/mbf_msgs-0.2.5-r1 3-Clause" >> $EPREFIX/etc/portage/package.license
-RUN echo ">=ros-melodic/mbf_abstract_nav-0.2.5-r1 3-Clause" >> $EPREFIX/etc/portage/package.license
-RUN emerge ros-melodic/move_base_flex
+RUN echo ">=ros-melodic/mbf_simple_nav-0.2.5-r1 3-Clause" >> $EPREFIX/etc/portage/package.license &&\
+    echo ">=ros-melodic/mbf_costmap_nav-0.2.5-r1 3-Clause" >> $EPREFIX/etc/portage/package.license &&\
+    echo ">=ros-melodic/mbf_msgs-0.2.5-r1 3-Clause" >> $EPREFIX/etc/portage/package.license &&\
+    echo ">=ros-melodic/mbf_abstract_nav-0.2.5-r1 3-Clause" >> $EPREFIX/etc/portage/package.license &&\
+    emerge ros-melodic/move_base_flex
 
-# #     ros-melodic/naoqi_libqicore \
-# #     ros-melodic/naoqi_libqi \
-# # need the patches I made in ros_pepperfix
+
+# Start building custom packages maintained by SoftBank Robotics
+# Patches for libqi and libqicore
+RUN mkdir -p /tmp/gentoo/etc/portage/patches/ros-melodic/naoqi_libqi
+COPY patches/libqi-release.patch /tmp/gentoo/etc/portage/patches/ros-melodic/naoqi_libqi/libqi-release.patch
+RUN mkdir -p /tmp/gentoo/etc/portage/patches/ros-melodic/naoqi_libqicore
+COPY patches/libqicore-release.patch /tmp/gentoo/etc/portage/patches/ros-melodic/naoqi_libqicore/libqicore-release.patch
+# Given upstream there is no support for libqi and libqicore for melodic with boost > 1.70
+# We just take the kinetic one and patch it to be 'melodic'
+# To be fair, this should be PR'ed to ros-overlay, or even better, adapt the library in melodic to accept all boosts
+COPY ebuilds/naoqi_libqi-2.5.0-r3.ebuild $EPREFIX/usr/local/portage/ros-melodic/naoqi_libqi
+COPY ebuilds/naoqi_libqicore-2.3.1-r1.ebuild $EPREFIX/usr/local/portage/ros-melodic/naoqi_libqicore
+RUN echo ">ros-melodic/naoqi_libqi-2.9" >> $EPREFIX/etc/portage/package.mask
+RUN echo ">ros-melodic/naoqi_libqicore-2.9" >> $EPREFIX/etc/portage/package.mask
+RUN $PREFIXED ebuild $EPREFIX/usr/local/portage/ros-melodic/naoqi_libqi/naoqi_libqi-2.5.0-r3.ebuild manifest
+RUN $PREFIXED ebuild $EPREFIX/usr/local/portage/ros-melodic/naoqi_libqicore/naoqi_libqicore-2.3.1-r1.ebuild manifest
+
+#install libqi, libqicore and naoqi_driver
+RUN emerge ros-melodic/naoqi_libqi ros-melodic/naoqi_libqicore ros-melodic/naoqi_driver
+
 
 # #     ros-melodic/web_video_server \
 # # CODEC_FLAG_GLOBAL_HEADER -> AV_CODEC_FLAG_GLOBAL_HEADER
@@ -177,9 +175,8 @@ echo '\
 RUN pip install --user h5py
 RUN pip install --user opencv-python opencv-contrib-python
 
-RUN pip install --user pyaudio
+RUN pip install --user pyaudio SpeechRecognition
 
-RUN pip install --user SpeechRecognition
 RUN pip install --user nltk
 RUN pip install --user pydub
 
@@ -204,16 +201,10 @@ RUN emerge ros-melodic/eband_local_planner
 # # # undocumented dependency of teb_local_planner
 # cholmod-2.1.2 does not build with amd-2.4.6 and colamd-2.9.6
 # cholmod is needed for suitesparse, and suitesparse is needed on libg2o
-RUN echo ">=sci-libs/amd-2.4.6" >> $EPREFIX/etc/portage/package.mask
-RUN echo ">=sci-libs/colamd-2.9.6" >> $EPREFIX/etc/portage/package.mask
-RUN emerge sci-libs/suitesparse
-# RUN cd /tmp/gentoo/etc/portage/patches/ros-melodic &&\
-#     mkdir -p libg2o-2016.4.24 &&\
-#     cd libg2o-2016.4.24 &&\
-#     wget https://gist.githubusercontent.com/awesomebytes/97aad67cbc86deb93a76ace964241848/raw/bc83232c2ff5df872db0d3d46d49aca1a78ecbc7/001-Debug-cholmod.patch &&\
-#     wget https://gist.githubusercontent.com/awesomebytes/79bafc394be8389d6430393edf77be47/raw/faae7ba38692d05c841b0aa3495e1618a3a70ca0/002-Hardcode-BLAS.patch
+RUN echo ">=sci-libs/amd-2.4.6" >> $EPREFIX/etc/portage/package.mask &&\
+    echo ">=sci-libs/colamd-2.9.6" >> $EPREFIX/etc/portage/package.mask &&\
+    emerge sci-libs/suitesparse
 
-# RUN emerge sci-libs/cholmod
 RUN cd /tmp/gentoo/usr/lib/cmake/Qt5Gui; find ./ -type f -exec sed -i -e 's@/home/user@/tmp@g' {} \;
 RUN emerge ros-melodic/libg2o
 
@@ -244,8 +235,9 @@ RUN emerge media-plugins/gst-plugins-opus \
     media-plugins/gst-plugins-v4l2 \
     media-plugins/gst-plugins-jpeg \
     media-plugins/gst-plugins-libpng \
-    media-plugins/gst-plugins-lame
-RUN emerge media-plugins/gst-plugins-x264 media-plugins/gst-plugins-x265
+    media-plugins/gst-plugins-lame \
+    media-plugins/gst-plugins-x264 \
+    media-plugins/gst-plugins-x265
 
 # RUN cd /tmp/gentoo/usr/local/portage/ros-melodic/gscam &&\
 #     wget  https://raw.githubusercontent.com/ros/ros-overlay/80a3d06744df220fadb34b638d94d4336af2b720/ros-melodic/gscam/Manifest&&\
@@ -267,16 +259,12 @@ RUN wget https://github.com/awesomebytes/pepper_os/releases/download/pynaoqi-pyt
 #     rm Manifest && \
 #     ebuild naoqi*.ebuild manifest
 
-# TODO: Fix naoqi_libqi with boost 1.71
-# RUN emerge ros-melodic/naoqi_libqi ros-melodic/naoqi_libqicore
-
 # TODO: this errors... shouldn't be too bad
 # RUN emerge ros-melodic/pepper_meshes
 
 RUN emerge dev-libs/libusb
 
-RUN pip install --user dill cloudpickle
-RUN pip install --user uptime
+RUN pip install --user dill cloudpickle uptime
 
 # Apparently not available for melodic. If needed, just use from source
 # RUN emerge ros-melodic/humanoid_nav_msgs
