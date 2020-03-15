@@ -242,9 +242,6 @@ RUN wget https://github.com/awesomebytes/pepper_os/releases/download/pynaoqi-pyt
 #     rm Manifest && \
 #     ebuild naoqi*.ebuild manifest
 
-# TODO: Fix naoqi_libqi with boost 1.71
-# RUN emerge ros-kinetic/naoqi_libqi ros-kinetic/naoqi_libqicore
-
 # TODO: this errors... shouldn't be too bad
 # RUN emerge ros-kinetic/pepper_meshes
 
