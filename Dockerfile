@@ -78,8 +78,8 @@ RUN emerge sci-libs/pcl
 
 RUN emerge ros-kinetic/robot_state_publisher \
     ros-kinetic/geometry2 \
-    ros-kinetic/ros_control
-RUN emerge ros-kinetic/image_common \
+    ros-kinetic/ros_control \
+    ros-kinetic/image_common \
     ros-kinetic/image_transport_plugins \
     ros-kinetic/diagnostics \
     ros-kinetic/octomap_msgs \
@@ -90,42 +90,39 @@ RUN emerge ros-kinetic/image_common \
 
 RUN emerge ros-kinetic/navigation
 RUN emerge ros-kinetic/slam_gmapping
-RUN emerge ros-kinetic/depthimage_to_laserscan
-RUN emerge ros-kinetic/rosbridge_suite
 RUN emerge ros-kinetic/cmake_modules \
     ros-kinetic/naoqi_bridge_msgs \
     ros-kinetic/perception_pcl \
     ros-kinetic/pcl_conversions \
-    ros-kinetic/pcl_ros
+    ros-kinetic/pcl_ros \
+    ros-kinetic/depthimage_to_laserscan \
+    ros-kinetic/rosbridge_suite
 RUN emerge media-libs/portaudio \
     net-libs/libnsl \
-    dev-cpp/eigen
-
-RUN emerge media-libs/opus
+    dev-cpp/eigen \
+    media-libs/opus
 
 # emerging pulseaudio asks for this
-RUN echo ">=media-plugins/alsa-plugins-1.2.1 pulseaudio" >> $EPREFIX/etc/portage/package.use
-# To avoid:
-#  * Error: circular dependencies:
-# (sys-libs/pam-1.3.1-r1:0/0::gentoo, ebuild scheduled for merge) depends on
-#  (sys-libs/libcap-2.27:0/0::gentoo, ebuild scheduled for merge) (buildtime)
-#   (sys-libs/pam-1.3.1-r1:0/0::gentoo, ebuild scheduled for merge) (buildtime)
-RUN echo ">=sys-libs/libcap-2.27 -pam" >> $EPREFIX/etc/portage/package.use
-# Until https://bugs.gentoo.org/702566 it's solved
-RUN echo ">=sys-libs/libcap-2.28" >> $EPREFIX/etc/portage/package.mask
-RUN echo "media-sound/pulseaudio -udev" >> $EPREFIX/etc/portage/package.use
-RUN emerge media-sound/pulseaudio
+RUN echo ">=media-plugins/alsa-plugins-1.2.1 pulseaudio" >> $EPREFIX/etc/portage/package.use &&\
+    echo "media-sound/pulseaudio -udev" >> $EPREFIX/etc/portage/package.use &&\
+    emerge media-sound/pulseaudio
 
 
-RUN echo ">=ros-kinetic/mbf_simple_nav-0.2.5-r1 3-Clause" >> $EPREFIX/etc/portage/package.license
-RUN echo ">=ros-kinetic/mbf_costmap_nav-0.2.5-r1 3-Clause" >> $EPREFIX/etc/portage/package.license
-RUN echo ">=ros-kinetic/mbf_msgs-0.2.5-r1 3-Clause" >> $EPREFIX/etc/portage/package.license
-RUN echo ">=ros-kinetic/mbf_abstract_nav-0.2.5-r1 3-Clause" >> $EPREFIX/etc/portage/package.license
-RUN emerge ros-kinetic/move_base_flex
+RUN echo ">=ros-kinetic/mbf_simple_nav-0.2.5-r1 3-Clause" >> $EPREFIX/etc/portage/package.license &&\
+    echo ">=ros-kinetic/mbf_costmap_nav-0.2.5-r1 3-Clause" >> $EPREFIX/etc/portage/package.license &&\
+    echo ">=ros-kinetic/mbf_msgs-0.2.5-r1 3-Clause" >> $EPREFIX/etc/portage/package.license &&\
+    echo ">=ros-kinetic/mbf_abstract_nav-0.2.5-r1 3-Clause" >> $EPREFIX/etc/portage/package.license &&\
+    emerge ros-kinetic/move_base_flex
 
-# #     ros-kinetic/naoqi_libqicore \
-# #     ros-kinetic/naoqi_libqi \
-# # need the patches I made in ros_pepperfix
+# Start building custom packages maintained by SoftBank Robotics
+# Patches for libqi and libqicore
+RUN mkdir -p /tmp/gentoo/etc/portage/patches/ros-kinetic/naoqi_libqi-2.5.0-r3
+COPY patches/libqi-release.patch /tmp/gentoo/etc/portage/patches/ros-kinetic/naoqi_libqi-2.5.0-r3/libqi-release.patch
+RUN mkdir -p /tmp/gentoo/etc/portage/patches/ros-kinetic/naoqi_libqicore-2.3.1-r1
+COPY patches/libqicore-release.patch /tmp/gentoo/etc/portage/patches/ros-kinetic/naoqi_libqicore-2.3.1-r1/libqicore-release.patch
+
+#install libqi, libqicore and naoqi_driver
+RUN emerge ros-kinetic/naoqi_libqi ros-kinetic/naoqi_libqicore ros-kinetic/naoqi_driver
 
 # #     ros-kinetic/web_video_server \
 # # CODEC_FLAG_GLOBAL_HEADER -> AV_CODEC_FLAG_GLOBAL_HEADER
@@ -162,9 +159,8 @@ echo '\
 RUN pip install --user h5py
 RUN pip install --user opencv-python opencv-contrib-python
 
-RUN pip install --user pyaudio
+RUN pip install --user pyaudio SpeechRecognition
 
-RUN pip install --user SpeechRecognition
 RUN pip install --user nltk
 RUN pip install --user pydub
 
@@ -191,11 +187,11 @@ RUN cd /tmp/gentoo/etc/portage/patches/ros-kinetic &&\
     wget https://gist.githubusercontent.com/awesomebytes/79bafc394be8389d6430393edf77be47/raw/faae7ba38692d05c841b0aa3495e1618a3a70ca0/002-Hardcode-BLAS.patch
 # cholmod-2.1.2 does not build with amd-2.4.6 and colamd-2.9.6
 # cholmod is needed for suitesparse, and suitesparse is needed on libg2o
-RUN echo ">=sci-libs/amd-2.4.6" >> $EPREFIX/etc/portage/package.mask
-RUN echo ">=sci-libs/colamd-2.9.6" >> $EPREFIX/etc/portage/package.mask
-RUN emerge sci-libs/suitesparse
+RUN echo ">=sci-libs/amd-2.4.6" >> $EPREFIX/etc/portage/package.mask &&\
+    echo ">=sci-libs/colamd-2.9.6" >> $EPREFIX/etc/portage/package.mask &&\
+    emerge sci-libs/suitesparse ros-kinetic/libg2o
+
 RUN cd /tmp/gentoo/usr/lib/cmake/Qt5Gui; find ./ -type f -exec sed -i -e 's@/home/user@/tmp@g' {} \;
-RUN emerge ros-kinetic/libg2o
 RUN cd /tmp/gentoo/etc/portage/patches/ros-kinetic &&\
     mkdir -p teb_local_planner &&\
     cd teb_local_planner &&\
@@ -205,8 +201,8 @@ RUN emerge ros-kinetic/dwa_local_planner
 # Workaround
 RUN cd /tmp/gentoo/usr/local/portage/ros-kinetic/sbpl_lattice_planner &&\
     rm Manifest && \
-    ebuild sbpl*.ebuild manifest
-RUN emerge ros-kinetic/sbpl_lattice_planner
+    ebuild sbpl*.ebuild manifest &&\
+    emerge ros-kinetic/sbpl_lattice_planner
 
 # Meanwhile https://bugs.gentoo.org/705974 gets fixed upstream (make has a backward incompatible change)
 RUN mkdir -p $EPREFIX/etc/portage/patches/media-libs/gstreamer-1.14.5 &&\
@@ -222,8 +218,9 @@ RUN emerge media-plugins/gst-plugins-opus \
     media-plugins/gst-plugins-v4l2 \
     media-plugins/gst-plugins-jpeg \
     media-plugins/gst-plugins-libpng \
-    media-plugins/gst-plugins-lame
-RUN emerge media-plugins/gst-plugins-x264 media-plugins/gst-plugins-x265
+    media-plugins/gst-plugins-lame \
+    media-plugins/gst-plugins-x264 \
+    media-plugins/gst-plugins-x265
 
 RUN cd /tmp/gentoo/usr/local/portage/ros-kinetic/gscam &&\
     wget  https://raw.githubusercontent.com/ros/ros-overlay/80a3d06744df220fadb34b638d94d4336af2b720/ros-kinetic/gscam/Manifest&&\
@@ -253,11 +250,9 @@ RUN wget https://github.com/awesomebytes/pepper_os/releases/download/pynaoqi-pyt
 
 RUN emerge dev-libs/libusb
 
-RUN pip install --user dill cloudpickle
-RUN pip install --user uptime
+RUN pip install --user dill cloudpickle uptime
 
-RUN emerge ros-kinetic/humanoid_nav_msgs
-RUN emerge ros-kinetic/rgbd_launch
+RUN emerge ros-kinetic/humanoid_nav_msgs ros-kinetic/rgbd_launch
 
 # Fix all python shebangs
 RUN cd ~/.local/bin &&\
