@@ -98,6 +98,10 @@ RUN rm $EPREFIX/usr/local/portage/ros-melodic/amcl/* &&\
     wget https://raw.githubusercontent.com/ros/ros-overlay/b6e46acea5918e68db3b4d2e00bb1a2caa779cb9/ros-melodic/amcl/amcl-1.16.4-r1.ebuild -O $EPREFIX/usr/local/portage/ros-melodic/amcl/amcl-1.16.4-r1.ebuild &&\
     emerge ros-melodic/amcl
 
+# Until https://github.com/ros-planning/navigation/pull/974 is merged and re-released
+RUN mkdir -p $EPREFIX/etc/portage/patches/ros-melodic/voxel_grid-1.16.4-r1
+RUN wget https://gist.githubusercontent.com/awesomebytes/09699bfbd8c07f80e92069b463dd868b/raw/7b8be0030ca5300def6225af4721fba181441a4c/0001-Fix-Uknown-CMake-command-check_include_file.patch -O $EPREFIX/etc/portage/patches/ros-melodic/voxel_grid-1.16.4-r1/0001-Fix-Uknown-CMake-command-check_include_file.patch
+
 
 RUN emerge ros-melodic/navigation
 RUN emerge ros-melodic/slam_gmapping
