@@ -76,6 +76,11 @@ RUN echo ">=sci-libs/pcl-1.10.0" >> /tmp/gentoo/etc/portage/package.mask
 RUN echo "=sci-libs/pcl-1.9.1 **" >> /tmp/gentoo/etc/portage/package.accept_keywords
 RUN emerge sci-libs/pcl
 
+# Something pulls app-editors/xemacs-21.5.34-r5
+# Meanwhile (if) https://bugs.gentoo.org/show_bug.cgi?id=712786 this is not fixed, we need to workaround
+RUN cd $EPREFIX/usr/portage/app-editors/xemacs; find ./ -type f -exec sed -i -e 's/${D}/${ED}/g' {} \; &&\
+    ebuild xemacs-21.5.34-r5.ebuild manifest
+
 RUN emerge ros-melodic/robot_state_publisher \
     ros-melodic/geometry2 \
     ros-melodic/ros_control \
