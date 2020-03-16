@@ -79,7 +79,7 @@ RUN emerge sci-libs/pcl
 RUN emerge ros-melodic/robot_state_publisher \
     ros-melodic/geometry2 \
     ros-melodic/ros_control \
-    emerge ros-melodic/image_common \
+    ros-melodic/image_common \
     ros-melodic/image_transport_plugins \
     ros-melodic/diagnostics \
     ros-melodic/octomap_msgs \
