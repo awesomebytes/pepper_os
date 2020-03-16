@@ -1,0 +1,167 @@
+diff --git a/qi/application.hpp b/qi/application.hpp
+index cd6b4dcb..b517c3e8 100644
+--- a/qi/application.hpp
++++ b/qi/application.hpp
+@@ -12,6 +12,7 @@
+ # include <vector>
+ # include <string>
+ # include <qi/api.hpp>
++#include <iostream>
+ 
+ namespace qi {
+ 
+diff --git a/qi/detail/executioncontext.hpp b/qi/detail/executioncontext.hpp
+index fa9a5f20..ef984732 100644
+--- a/qi/detail/executioncontext.hpp
++++ b/qi/detail/executioncontext.hpp
+@@ -10,6 +10,7 @@
+ #include <boost/function.hpp>
+ #include <qi/clock.hpp>
+ #include <qi/api.hpp>
++#include <boost/type_traits.hpp>
+ 
+ namespace qi
+ {
+diff --git a/qi/eventloop.hpp b/qi/eventloop.hpp
+index 5ed18d37..5b10a744 100644
+--- a/qi/eventloop.hpp
++++ b/qi/eventloop.hpp
+@@ -25,10 +25,11 @@
+ #  pragma warning( disable: 4996 ) // TODO: Reactivate this warning once msvc stop triggerring a warning on overloading a deprecated function
+ # endif
+ 
+-namespace boost {
+-  namespace asio {
++/*namespace boost {
++   namespace asio {
+     class io_service;
+-}}
++}}*/
++#include <boost/asio.hpp>
+ 
+ namespace qi
+ {
+diff --git a/qi/type/detail/anyfunctionfactory.hxx b/qi/type/detail/anyfunctionfactory.hxx
+index 1713ded3..ef562ed0 100644
+--- a/qi/type/detail/anyfunctionfactory.hxx
++++ b/qi/type/detail/anyfunctionfactory.hxx
+@@ -32,6 +32,7 @@
+ #include <boost/thread/mutex.hpp>
+ #include <qi/atomic.hpp>
+ #include <qi/anyvalue.hpp>
++#include <boost/type_traits/is_fundamental.hpp>
+ 
+ namespace qi
+ {
+diff --git a/src/eventloop.cpp b/src/eventloop.cpp
+index f8dde0d5..b8fc2430 100644
+--- a/src/eventloop.cpp
++++ b/src/eventloop.cpp
+@@ -369,7 +369,7 @@ namespace qi {
+     tracepoint(qi_qi, eventloop_delay, id, cb.target_type().name(), boost::chrono::duration_cast<qi::MicroSeconds>(delay).count());
+     if (delay > Duration::zero())
+     {
+-      boost::shared_ptr<boost::asio::steady_timer> timer = boost::make_shared<boost::asio::steady_timer>(boost::ref(_io));
++      boost::shared_ptr<boost::asio::steady_timer> timer = boost::make_shared<boost::asio::steady_timer>(_io);
+       timer->expires_from_now(boost::chrono::duration_cast<boost::asio::steady_timer::duration>(delay));
+       qi::Promise<void> prom(boost::bind(&boost::asio::steady_timer::cancel, timer));
+       timer->async_wait(boost::bind(&EventLoopAsio::invoke_maybe, this, cb, id, prom, _1));
+@@ -397,7 +397,7 @@ namespace qi {
+ 
+     ++_totalTask;
+     //tracepoint(qi_qi, eventloop_delay, id, cb.target_type().name(), qi::MicroSeconds(delay).count());
+-    boost::shared_ptr<SteadyTimer> timer = boost::make_shared<SteadyTimer>(boost::ref(_io));
++    boost::shared_ptr<SteadyTimer> timer = boost::make_shared<SteadyTimer>(_io);
+     timer->expires_at(timepoint);
+     qi::Promise<void> prom(boost::bind(&SteadyTimer::cancel, timer));
+     timer->async_wait(boost::bind(&EventLoopAsio::invoke_maybe, this, cb, id, prom, _1));
+@@ -655,3 +655,4 @@ namespace qi {
+     return *(boost::asio::io_service*)getEventLoop()->nativeHandle();
+   }
+ }
++
+diff --git a/src/iocolor.cpp b/src/iocolor.cpp
+index 17a294b4..8f7c73a0 100644
+--- a/src/iocolor.cpp
++++ b/src/iocolor.cpp
+@@ -8,7 +8,7 @@
+ #include <qi/iocolor.hpp>
+ #include <sstream>
+ #include <qi/os.hpp>
+-
++#include <iostream>
+ #if defined(__APPLE__) or defined(__linux__)
+ static std::string makeCol(char c, char modifier = -1) {
+   std::stringstream ret;
+diff --git a/src/messaging/tcptransportsocket.cpp b/src/messaging/tcptransportsocket.cpp
+index 0893860e..ce43f0ec 100644
+--- a/src/messaging/tcptransportsocket.cpp
++++ b/src/messaging/tcptransportsocket.cpp
+@@ -362,7 +362,7 @@ namespace qi
+     qiLogVerbose() << "Trying to connect to " << _url.host() << ":" << _url.port();
+     using namespace boost::asio;
+     // Resolve url
+-    _r = boost::shared_ptr<boost::asio::ip::tcp::resolver>(new boost::asio::ip::tcp::resolver(_socket->get_io_service()));
++    _r = boost::shared_ptr<boost::asio::ip::tcp::resolver>(new boost::asio::ip::tcp::resolver(_socket->get_executor()));
+     ip::tcp::resolver::query q(_url.host(), boost::lexical_cast<std::string>(_url.port())
+                            #ifndef ANDROID
+                                , boost::asio::ip::tcp::resolver::query::all_matching
+diff --git a/src/messaging/transportserverasio_p.cpp b/src/messaging/transportserverasio_p.cpp
+index e400cfc7..1db501af 100644
+--- a/src/messaging/transportserverasio_p.cpp
++++ b/src/messaging/transportserverasio_p.cpp
+@@ -97,9 +97,9 @@ namespace qi
+         }
+     }
+ #ifdef WITH_SSL
+-    _s = new boost::asio::ssl::stream<boost::asio::ip::tcp::socket>(_acceptor->get_io_service(), _sslContext);
++    _s = new boost::asio::ssl::stream<boost::asio::ip::tcp::socket>(_acceptor->get_executor(), _sslContext);
+ #else
+-    _s = new boost::asio::ip::tcp::socket(_acceptor->get_io_service());
++    _s = new boost::asio::ip::tcp::socket(_acceptor->get_executor());
+ #endif
+     _acceptor->async_accept(_s->lowest_layer(),
+                            boost::bind(_onAccept, shared_from_this(), _1, _s));
+@@ -199,7 +199,7 @@ namespace qi
+     using namespace boost::asio;
+ #ifndef ANDROID
+     // resolve endpoint
+-    ip::tcp::resolver r(_acceptor->get_io_service());
++    ip::tcp::resolver r(_acceptor->get_executor());
+     ip::tcp::resolver::query q(_listenUrl.host(), boost::lexical_cast<std::string>(_listenUrl.port()),
+                                boost::asio::ip::tcp::resolver::query::all_matching);
+     ip::tcp::resolver::iterator it = r.resolve(q);
+@@ -230,7 +230,7 @@ namespace qi
+     boost::asio::socket_base::reuse_address option(false);
+ #else
+     boost::asio::socket_base::reuse_address option(true);
+-    fcntl(_acceptor->native(), F_SETFD, FD_CLOEXEC);
++    fcntl(_acceptor->native_handle(), F_SETFD, FD_CLOEXEC);
+ #endif
+     _acceptor->set_option(option);
+     _acceptor->bind(ep);
+@@ -287,9 +287,9 @@ namespace qi
+       _sslContext.use_private_key_file(self->_identityKey.c_str(), boost::asio::ssl::context::pem);
+     }
+ 
+-    _s = new boost::asio::ssl::stream<boost::asio::ip::tcp::socket>(_acceptor->get_io_service(), _sslContext);
++    _s = new boost::asio::ssl::stream<boost::asio::ip::tcp::socket>(_acceptor->get_executor(), _sslContext);
+ #else
+-    _s = new boost::asio::ip::tcp::socket(_acceptor->get_io_service());
++    _s = new boost::asio::ip::tcp::socket(_acceptor->get_executor());
+ #endif
+     _acceptor->async_accept(_s->lowest_layer(),
+       boost::bind(_onAccept, shared_from_this(), _1, _s));
+diff --git a/src/sdklayout-boost.cpp b/src/sdklayout-boost.cpp
+index ba11d449..cd3f68ec 100644
+--- a/src/sdklayout-boost.cpp
++++ b/src/sdklayout-boost.cpp
+@@ -539,7 +539,7 @@ namespace qi {
+             const std::string fullPath = itD->path().string(qi::unicodeFacet());
+             if (boost::regex_match(fullPath, pathRegex))
+             {
+-              std::string relativePath = relative(dataPath, itD->path());
++              std::string relativePath = ::relative(dataPath, itD->path());
+               if (matchedPaths.find(relativePath) == matchedPaths.end())
+               {
+                 // we only add the match if it was not found in a previous

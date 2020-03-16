@@ -1,0 +1,13 @@
+diff --git a/libqicore/src/logproviderimpl.cpp b/libqicore/src/logproviderimpl.cpp
+index d9315f1..efcc859 100644
+--- a/libqicore/src/logproviderimpl.cpp
++++ b/libqicore/src/logproviderimpl.cpp
+@@ -8,7 +8,7 @@
+ 
+ #include <boost/lexical_cast.hpp>
+ #include <boost/lockfree/queue.hpp>
+-
++#include <iostream>
+ #include <qi/anymodule.hpp>
+ #include <qi/type/objecttypebuilder.hpp>
+ 
