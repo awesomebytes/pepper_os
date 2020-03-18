@@ -63,6 +63,7 @@ RUN cd /tmp/gentoo/opt &&\
 
 
 RUN cd /tmp && git clone https://github.com/awesomebytes/pepper_os &&\
+    cd pepper_os && git checkout melodic && cd .. &&\
     mkdir -p /tmp/gentoo/etc/portage/patches/ros-melodic &&\
     cp -r pepper_os/patches/* /tmp/gentoo/etc/portage/patches/ros-melodic &&\
     rm -rf pepper_os
