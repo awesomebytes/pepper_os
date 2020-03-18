@@ -94,9 +94,11 @@ RUN emerge ros-melodic/robot_state_publisher \
     ros-melodic/ddynamic_reconfigure_python
 
 
-# Until https://github.com/ros-planning/navigation/pull/974 is merged and re-released
-RUN mkdir -p $EPREFIX/etc/portage/patches/ros-melodic/voxel_grid-1.16.4-r1
-RUN wget https://gist.githubusercontent.com/awesomebytes/09699bfbd8c07f80e92069b463dd868b/raw/7b8be0030ca5300def6225af4721fba181441a4c/0001-Fix-Uknown-CMake-command-check_include_file.patch -O $EPREFIX/etc/portage/patches/ros-melodic/voxel_grid-1.16.4-r1/0001-Fix-Uknown-CMake-command-check_include_file.patch
+# Until https://github.com/ros-planning/navigation/pull/975 is merged and re-released (navfn and base_local_planner broken)
+RUN mkdir -p $EPREFIX/etc/portage/patches/ros-melodic/base_local_planner &&\
+    wget https://gist.githubusercontent.com/awesomebytes/ecf17fd753423d3041146ab8dc3f4311/raw/6cc2939156aa1b5f250ed939bbb7d9b80955f60b/base_local_planner_check_include_file.patch -O $EPREFIX/etc/portage/patches/ros-melodic/base_local_planner/base_local_planner_check_include_file.patch &&\
+    mkdir -p $EPREFIX/etc/portage/patches/ros-melodic/navfn &&\
+    wget https://gist.githubusercontent.com/awesomebytes/8069774e1c7c6bcb3ced5fea58f72992/raw/e9007ec0675388a3bd8c0182f9f5af2aa1045afb/navfn_check_include_file.patch -O $EPREFIX/etc/portage/patches/ros-melodic/navfn/navfn_check_include_file.patch
 
 
 RUN emerge ros-melodic/navigation
