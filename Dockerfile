@@ -103,6 +103,9 @@ RUN mkdir -p $EPREFIX/etc/portage/patches/ros-melodic/base_local_planner &&\
 
 RUN emerge ros-melodic/navigation
 RUN emerge ros-melodic/slam_gmapping
+# Until 2020/04/17 we will need to manually unmask it as
+# it is being deprecated, ros-overlay fix https://github.com/ros/ros-overlay/pull/976
+RUN echo "dev-python/soappy" >> $EPREFIX/etc/portage/package.unmask
 RUN emerge ros-melodic/cmake_modules \
     ros-melodic/naoqi_bridge_msgs \
     ros-melodic/perception_pcl \
