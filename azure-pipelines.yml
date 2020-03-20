@@ -15,6 +15,7 @@ jobs:
       timeoutInMinutes: 0
     - script: docker login -u $(DockerHub_user) -p $(DockerHub_password)
       displayName: 'docker login'
+      condition: always()
       # Even if it fails I want to push the image to DockerHub for inspection
     # The variables are set on the Build options on the web interface
     # # Try to tag the latest failed image we ran
@@ -59,6 +60,7 @@ jobs:
     # The variables are set on the Build options on the web interface
     - script: docker login -u $(DockerHub_user) -p $(DockerHub_password)
       displayName: 'docker login'
+      condition: always()
       # Even if it fails I want to push the image to DockerHub for inspection
     - script: docker tag `docker ps -a -l -q | xargs docker commit | awk -F":" '{print $2}'` $(DockerHub_user)/$(docker_image_name):$(Build.BuildId)
       displayName: 'create image to push to DockerHub'
