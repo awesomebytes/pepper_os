@@ -90,6 +90,9 @@ RUN emerge ros-kinetic/robot_state_publisher \
 
 RUN emerge ros-kinetic/navigation
 RUN emerge ros-kinetic/slam_gmapping
+# Until 2020/04/17 we will need to manually unmask it as
+# it is being deprecated, ros-overlay fix https://github.com/ros/ros-overlay/pull/976
+RUN echo "dev-python/soappy" >> $EPREFIX/etc/portage/package.unmask
 RUN emerge ros-kinetic/cmake_modules \
     ros-kinetic/naoqi_bridge_msgs \
     ros-kinetic/perception_pcl \
