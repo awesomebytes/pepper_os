@@ -170,8 +170,7 @@ RUN pip install --user scipy pytz wstool
 # RUN pip install --user pytz
 # RUN pip install --user wstool
 
-RUN pip install --user Theano
-RUN pip install --user keras
+RUN pip install --user Theano keras
 RUN mkdir -p ~/.keras && \
 echo '\
 {\
@@ -188,10 +187,7 @@ echo '\
 RUN pip install --user h5py
 RUN pip install --user opencv-python opencv-contrib-python
 
-RUN pip install --user pyaudio SpeechRecognition
-
-RUN pip install --user nltk
-RUN pip install --user pydub
+RUN pip install --user pyaudio SpeechRecognition nltk pydub
 
 RUN pip install --user jupyter
 
