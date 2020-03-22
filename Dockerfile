@@ -140,12 +140,14 @@ COPY patches/libqicore-release.patch /tmp/gentoo/etc/portage/patches/ros-melodic
 # Given upstream there is no support for libqi and libqicore for melodic with boost > 1.70
 # We just take the kinetic one and patch it to be 'melodic'
 # To be fair, this should be PR'ed to ros-overlay, or even better, adapt the library in melodic to accept all boosts
-COPY ebuilds/naoqi_libqi-2.5.0-r3.ebuild $EPREFIX/usr/local/portage/ros-melodic/naoqi_libqi
-COPY ebuilds/naoqi_libqicore-2.3.1-r1.ebuild $EPREFIX/usr/local/portage/ros-melodic/naoqi_libqicore
+# COPY ebuilds/naoqi_libqi-2.5.0-r3.ebuild $EPREFIX/usr/local/portage/ros-melodic/naoqi_libqi
+# COPY ebuilds/naoqi_libqicore-2.3.1-r1.ebuild $EPREFIX/usr/local/portage/ros-melodic/naoqi_libqicore
+RUN wget https://gist.githubusercontent.com/awesomebytes/6e85653e5a81de34c0287c5ba4d2a236/raw/339e3a9171dddd589ea2fee3382138867028ee5e/naoqi_libqi-2.5.0-r3.ebuild -O $EPREFIX/usr/local/portage/ros-melodic/naoqi_libqi/naoqi_libqi-2.5.0-r3.ebuild
+RUN wget https://gist.githubusercontent.com/awesomebytes/0481f71d47c78cd46f0ea18e6639e21a/raw/506843a40d071db2071a025ad2c7249a766e332c/naoqi_libqicore-2.3.1-r1.ebuild -O $EPREFIX/usr/local/portage/ros-melodic/naoqi_libqicore/naoqi_libqicore-2.3.1-r1.ebuild
 RUN echo ">ros-melodic/naoqi_libqi-2.9" >> $EPREFIX/etc/portage/package.mask
 RUN echo ">ros-melodic/naoqi_libqicore-2.9" >> $EPREFIX/etc/portage/package.mask
-RUN $PREFIXED ebuild $EPREFIX/usr/local/portage/ros-melodic/naoqi_libqi/naoqi_libqi-2.5.0-r3.ebuild manifest
-RUN $PREFIXED ebuild $EPREFIX/usr/local/portage/ros-melodic/naoqi_libqicore/naoqi_libqicore-2.3.1-r1.ebuild manifest
+RUN ebuild $EPREFIX/usr/local/portage/ros-melodic/naoqi_libqi/naoqi_libqi-2.5.0-r3.ebuild manifest
+RUN ebuild $EPREFIX/usr/local/portage/ros-melodic/naoqi_libqicore/naoqi_libqicore-2.3.1-r1.ebuild manifest
 
 #install libqi, libqicore and naoqi_driver
 RUN emerge ros-melodic/naoqi_libqi ros-melodic/naoqi_libqicore ros-melodic/naoqi_driver
