@@ -49,17 +49,17 @@ RUN cd $EPREFIX/usr/local/portage && git clean -f && git reset --hard
 # Now we can update
 RUN emaint sync -a
 # Prepare python
-RUN emerge dev-python/pip
-RUN pip install --user argparse
+RUN emerge dev-python/pip && pip install --user argparse
 
 RUN echo "# required by ros-kinetic/pcl_conversions-0.2.1::ros-overlay for navigation" >> $EPREFIX/etc/portage/package.accept_keywords &&\
     echo "=sci-libs/pcl-9999 **" >> $EPREFIX/etc/portage/package.accept_keywords
 
-# Very ugly hack, need to fix this from whereve it came
-# some packages are affected, others arent, weird
-RUN cd /tmp/gentoo/opt &&\
-    find ./ -type f -name *.pc -exec sed -i -e 's@/home/user/gentoo@/tmp/gentoo@g' {} \; &&\
-    find ./ -type f -name *.cmake -exec sed -i -e 's@/home/user/gentoo@/tmp/gentoo@g' {} \;
+# Not needed anymore as now everything is built on /tmp/gentoo natively.
+# # Very ugly hack, need to fix this from whereve it came
+# # some packages are affected, others arent, weird
+# RUN cd /tmp/gentoo/opt &&\
+#     find ./ -type f -name *.pc -exec sed -i -e 's@/home/user/gentoo@/tmp/gentoo@g' {} \; &&\
+#     find ./ -type f -name *.cmake -exec sed -i -e 's@/home/user/gentoo@/tmp/gentoo@g' {} \;
 
 
 RUN cd /tmp && git clone https://github.com/awesomebytes/pepper_os &&\
@@ -72,8 +72,8 @@ RUN cd /tmp && git clone https://github.com/awesomebytes/pepper_os &&\
 # RUN mkdir -p /tmp/gentoo/etc/portage/patches/sci-libs/pcl-1.8.1 && \
 #     cd /tmp/gentoo/etc/portage/patches/sci-libs/pcl-1.8.1 && \
 #     wget https://664126.bugs.gentoo.org/attachment.cgi?id=545428 -O gcc8.patch
-RUN echo ">=sci-libs/pcl-1.10.0" >> /tmp/gentoo/etc/portage/package.mask
-RUN echo "=sci-libs/pcl-1.9.1 **" >> /tmp/gentoo/etc/portage/package.accept_keywords
+RUN echo ">=sci-libs/pcl-1.10.0" >> /tmp/gentoo/etc/portage/package.mask &&\
+    echo "=sci-libs/pcl-1.9.1 **" >> /tmp/gentoo/etc/portage/package.accept_keywords
 RUN emerge sci-libs/pcl
 
 RUN emerge ros-kinetic/robot_state_publisher \
@@ -88,8 +88,7 @@ RUN emerge ros-kinetic/robot_state_publisher \
     ros-kinetic/ddynamic_reconfigure_python
 
 
-RUN emerge ros-kinetic/navigation
-RUN emerge ros-kinetic/slam_gmapping
+RUN emerge ros-kinetic/navigation ros-kinetic/slam_gmapping
 # Until 2020/04/17 we will need to manually unmask it as
 # it is being deprecated, ros-overlay fix https://github.com/ros/ros-overlay/pull/976
 RUN echo "dev-python/soappy" >> $EPREFIX/etc/portage/package.unmask
@@ -138,7 +137,7 @@ RUN git clone https://github.com/davisking/dlib &&\
     python setup.py install --user --no USE_AVX_INSTRUCTIONS
 
 RUN pip install --user pysqlite
-RUN pip install --user ipython
+RUN pip install --user ipython jupyter
 RUN pip install --user --upgrade numpy
 RUN pip install --user scipy pytz wstool
 # RUN pip install --user pytz
@@ -162,8 +161,6 @@ RUN pip install --user h5py
 RUN pip install --user opencv-python opencv-contrib-python
 
 RUN pip install --user pyaudio SpeechRecognition nltk pydub
-
-RUN pip install --user jupyter
 
 RUN pip install --user https://github.com/awesomebytes/pepper_os/releases/download/upload_tensorflow-1.6.0/tensorflow-1.6.0-cp27-cp27mu-linux_i686.whl
 
@@ -269,7 +266,7 @@ RUN echo "/home/nao/.local/bin/roscore_boot_manager.py" >> /home/nao/naoqi/prefe
 # Fix new path on pynaoqi
 RUN sed -i 's@/home/nao/pynaoqi-python2.7-2.5.5.5-linux32/lib/libqipython.so@/home/nao/.local/pynaoqi-python2.7-2.5.5.5-linux32/lib/libqipython.so@g' /home/nao/.local/pynaoqi-python2.7-2.5.5.5-linux32/lib/python2.7/site-packages/qi/__init__.py
 
-RUN df -h
+# RUN df -h
 # TODO: https://github.com/uts-magic-lab/command_executer
 
 ENTRYPOINT ["/tmp/gentoo/startprefix"]
