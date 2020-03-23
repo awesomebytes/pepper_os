@@ -3,14 +3,16 @@
 Kinetic build: [![Build Status](https://dev.azure.com/ROOGP/ROOGP_CI/_apis/build/status/awesomebytes.pepper_os?branchName=master)](https://dev.azure.com/ROOGP/ROOGP_CI/_build?definitionId=1&_a=summary&view=runs)
 Melodic build: [![Build Status](https://dev.azure.com/ROOGP/ROOGP_CI/_apis/build/status/awesomebytes.pepper_os?branchName=melodic)](https://dev.azure.com/ROOGP/ROOGP_CI/_build?definitionId=1&_a=summary&view=runs)
 
-Building over [Gentoo Prefix](https://github.com/awesomebytes/gentoo_prefix_ci_32b), over that [ros-overlay](https://github.com/awesomebytes/ros_overlay_on_gentoo_prefix_32b/), plus anything extra
+Building over [Gentoo Prefix](https://github.com/awesomebytes/gentoo_prefix_ci_32b), over that [ros-overlay](https://github.com/awesomebytes/ros_overlay_on_gentoo_prefix_32b/) (ROS Kinetic on branch `master`, ROS Melodic on branch `melodic`, plus anything extra
 needed to make Pepper robots able to do more with the latest available software. The base image is the
-raw Pepper hard disk image (so you can use it as a cross-compilation platform).
+raw Pepper hard disk image on version 2.5.5.5 (so you can use it as a cross-compilation platform).
 
 Pre-compiled software includes:
 * ROS Kinetic/Melodic (ROS desktop + navigation stack + many others) ([274 packages list](ROS_package_list.md))
 * Latest Python 2.7.17 with a lot of libraries like dlib, Theano, OpenCV, Tensorflow, numpy ([255 packages list](PIP_package_list.md))
 * All the necessary dependencies that make it possible to build it thanks to Gentoo Prefix (latest GCC, latest CMake, etc) ([767 packages list](GENTOO_package_list.md))
+
+You can use this repository as a reference to build your own image for your robot based on your software needs. Let me know if it's missing documentation, you find rough corners, etc!
 
 # How to deploy on your robot
 
@@ -57,8 +59,12 @@ docker build --network host -f Dockerfile -t pepper_os .
 You can speed it up by using the cache of the latest version from the CI (5.3GB download though):
 
 ```bash
+# For Kinetic
 docker pull awesomebytes/pepper_os_image
 docker build --network host -f Dockerfile --cache-from awesomebytes/pepper_os_image -t pepper_os .
+# For melodic
+docker pull awesomebytes/pepper_os_image_melodic
+docker build --network host -f Dockerfile --cache-from awesomebytes/pepper_os_image_melodic -t pepper_os .
 ```
 
 # Run just the docker image
@@ -66,7 +72,10 @@ docker build --network host -f Dockerfile --cache-from awesomebytes/pepper_os_im
 From the CI:
 
 ```bash
+# For Kinetic
 docker run -it -h pepper awesomebytes/pepper_os_image
+# For Melodic
+docker run -it -h pepper awesomebytes/pepper_os_image_melodic
 ```
 
 If you built your own:
