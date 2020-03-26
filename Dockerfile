@@ -8,10 +8,10 @@ RUN cat /proc/cpuinfo; cat /proc/meminfo; df -h
 # Download and extract the latest Gentoo Prefix + ROS desktop image
 RUN last_desktop_url=`curl -s -L https://github.com/awesomebytes/ros_overlay_on_gentoo_prefix_32b/releases | grep -m 1 "ROS Melodic desktop" | cut -d '"' -f2 | xargs -n 1 printf "http://github.com%s\n"`; \
 curl -s -L $last_desktop_url | grep download/release | cut -d '"' -f2 | xargs -n 1 printf "https://github.com%s\n" | xargs -n 1 curl -O -L -s &&\
-    cat gentoo_on_tmp* > gentoo_on_tmp.tar.gz &&\
+    cat gentoo_on_tmp* > gentoo_on_tmp.tar.lzma &&\
     rm gentoo_on_tmp*.part* &&\
-    tar xf gentoo_on_tmp.tar.gz &&\
-    rm gentoo_on_tmp.tar.gz
+    tar xf gentoo_on_tmp.tar.lzma &&\
+    rm gentoo_on_tmp.tar.lzma
 
 # Fix permissions of tmp
 USER root
