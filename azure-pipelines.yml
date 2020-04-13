@@ -9,6 +9,8 @@ jobs:
       docker_image_name: pepper_os_image_melodic
 
     steps:
+    - script: docker system prune -a -f
+      displayName: 'clear disk space'
     - script: docker build --network host -f Dockerfile -t $(DockerHub_user)/$(docker_image_name):$(Build.BuildId) .
       displayName: 'docker build'
       # This means up to 6h
