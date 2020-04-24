@@ -41,7 +41,7 @@ jobs:
  
   - job: package_stage
     timeoutInMinutes: 0
-    # dependsOn: "build_pepper_os_1"
+    dependsOn: "build_pepper_os_1"
 
     pool:
       vmImage: 'Ubuntu 16.04'
