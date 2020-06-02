@@ -96,9 +96,9 @@ jobs:
     # Not really needed
     # - script: docker rm -v $id
     # Make a release
-    - script: python -m pip install --upgrade pip setuptools wheel
+    - script: python3 -m pip install --upgrade pip setuptools wheel
       displayName: 'Install tools'
-    - script: python -m pip install --user githubrelease
+    - script: python3 -m pip install --user githubrelease
       displayName: 'Install tools 2'
     - script: |
         export DATE=$(date -I'minutes' | sed 's/+/plus/g'| sed 's/:/at/g')
@@ -112,7 +112,7 @@ jobs:
         split -b 1536MB -d ${RELEASE_FILE_NAME} ${RELEASE_FILE_NAME}.part-
         rm ${RELEASE_FILE_NAME}
         export PATH=$HOME/.local/bin:$PATH
-        export PYTHONPATH=$HOME/.local/lib/python2.7/site-packages:$PYTHONPATH
+        export PYTHONPATH=$HOME/.local/lib/python3.5/site-packages:$PYTHONPATH
         githubrelease --github-token $(GitHub_Token) release $(Build.Repository.Name) create "${RELEASE_TAG}" --publish --name "${RELEASE_NAME}" --body "${BODY}" "${RELEASE_FILE_NAME}.part-*"
       displayName: 'Create Release'
 
