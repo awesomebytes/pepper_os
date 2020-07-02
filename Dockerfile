@@ -11,16 +11,17 @@ RUN release_url="https://github.com/awesomebytes/ros_overlay_on_gentoo_prefix_32
     last_desktop_url=`curl -s -L $release_url | grep -m 1 "ROS Kinetic desktop" | cut -d '"' -f2 | xargs -n 1 printf "http://github.com%s\n"`;\
     # Check if the url is empty, if so we try the next page until we find a Desktop release
     while [ ${#last_desktop_url} -le 20 ]; \
-        do echo "Trying to find release on next page."; \
-        tmp_release_url=`curl -s -L $release_url | grep -m 1 "Next" | cut -d '"' -f8`; \
-        if [[ $tmp_release_url == "nofollow" ]]; then \
-        release_url=`curl -s -L $release_url | grep -m 1 "Next" | cut -d '"' -f10`; \
-        else \
-            release_url=$tmp_release_url; \
-        fi \
-        echo "Next release page url: $release_url"; \
-        last_desktop_url=`curl -s -L $release_url | grep -m 1 "ROS Kinetic desktop" | cut -d '"' -f2 | xargs -n 1 printf "http://github.com%s\n"`;\
-    done; \
+        do \
+            echo "Trying to find release on next page."; \
+            tmp_release_url=`curl -s -L $release_url | grep -m 1 "Next" | cut -d '"' -f8`; \
+            if [ "$tmp_release_url" = "nofollow" ]; then \
+                release_url=`curl -s -L $release_url | grep -m 1 "Next" | cut -d '"' -f10`; \
+            else \
+                release_url=$tmp_release_url; \
+            fi;\
+            echo "Next release page url: $release_url"; \
+            last_desktop_url=`curl -s -L $release_url | grep -m 1 "ROS Kinetic desktop" | cut -d '"' -f2 | xargs -n 1 printf "http://github.com%s\n"`;\
+        done; \
     echo "Latest release found in url: $last_desktop_url";\
     curl -s -L $last_desktop_url | grep download/release | cut -d '"' -f2 | xargs -n 1 printf "https://github.com%s\n" | xargs -n 1 curl -O -L -s &&\
     cat gentoo_on_tmp* | tar --extract --lzma --file - &&\
