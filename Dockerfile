@@ -12,7 +12,12 @@ RUN release_url="https://github.com/awesomebytes/ros_overlay_on_gentoo_prefix_32
     # Check if the url is empty, if so we try the next page until we find a Desktop release
     while [ ${#last_desktop_url} -le 20 ]; \
         do echo "Trying to find release on next page."; \
-        release_url=`curl -s -L $release_url | grep -m 1 "Next" | cut -d '"' -f8`; \
+        tmp_release_url=`curl -s -L $release_url | grep -m 1 "Next" | cut -d '"' -f8`; \
+        if [[ $tmp_release_url == "nofollow" ]]; then \
+        release_url=`curl -s -L $release_url | grep -m 1 "Next" | cut -d '"' -f10`; \
+        else \
+            release_url=$tmp_release_url; \
+        fi \
         echo "Next release page url: $release_url"; \
         last_desktop_url=`curl -s -L $release_url | grep -m 1 "ROS Kinetic desktop" | cut -d '"' -f2 | xargs -n 1 printf "http://github.com%s\n"`;\
     done; \
