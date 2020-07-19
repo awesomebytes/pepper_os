@@ -89,6 +89,10 @@ RUN cd /tmp && git clone https://github.com/awesomebytes/pepper_os &&\
 #     wget https://664126.bugs.gentoo.org/attachment.cgi?id=545428 -O gcc8.patch
 RUN echo ">=sci-libs/pcl-1.10.0" >> /tmp/gentoo/etc/portage/package.mask
 RUN echo "=sci-libs/pcl-1.9.1 **" >> /tmp/gentoo/etc/portage/package.accept_keywords
+# Until    is merged
+RUN mkdir -p /tmp/gentoo/usr/local/portage/sci-libs/pcl && cd /tmp/gentoo/usr/local/portage/sci-libs/pcl &&\
+    wget https://gitweb.gentoo.org/repo/gentoo.git/plain/sci-libs/pcl/pcl-1.9.1.ebuild?id=33fa34b845be331e89f8e9ba0c1cc80eb8a8ea62 -O pcl-1.9.1.ebuild &&\
+    ebuild pcl-1.9.1.ebuild manifest
 RUN emerge sci-libs/pcl
 
 # Something pulls app-editors/xemacs-21.5.34-r5
